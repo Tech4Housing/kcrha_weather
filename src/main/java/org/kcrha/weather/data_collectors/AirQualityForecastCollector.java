@@ -27,16 +27,18 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
 
             HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=47.6041&longitude=-122.3282&distance=25&API_KEY=***REMOVED***")).GET().timeout(Duration.ofSeconds(10)).build();
 
-            return handleRequest(client.send(request, HttpResponse.BodyHandlers.ofString()));
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
+
+            return handleRequest(List.of(gson.fromJson(response.body(), Forecast[].class)));
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DailyAirQualityForecast> handleRequest(HttpResponse<String> response) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
+    private List<DailyAirQualityForecast> handleRequest(List<Forecast> forecasts) {
 
-        return Arrays.stream(gson.fromJson(response.body(), Forecast[].class)).toList().stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), forecast.AQI())).toList();
+        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), forecast.AQI())).toList();
     }
 }
