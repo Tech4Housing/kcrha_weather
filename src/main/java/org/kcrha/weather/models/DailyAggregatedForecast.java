@@ -9,7 +9,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyAirQualityForecast {
+public class DailyAggregatedForecast {
     LocalDate day;
     Integer airQualityIndex;
+    public Integer temperatureHigh;
+    public Integer temperatureLow;
 }
