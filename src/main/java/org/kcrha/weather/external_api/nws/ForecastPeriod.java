@@ -1,12 +1,13 @@
 package org.kcrha.weather.external_api.nws;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 public record ForecastPeriod(
         Integer number,
         String name,
-        ZonedDateTime startTime,
-        ZonedDateTime endTime,
+        LocalDate startTime,
+        LocalDate endTime,
         Boolean isDayTime,
         Integer temperature,
         String temperatureUnit,

@@ -1,6 +1,6 @@
 package org.kcrha.weather.data_collectors;
 
-import org.kcrha.weather.records.DailyAirQualityForecast;
+import org.kcrha.weather.models.DailyAirQualityForecast;
 
 import java.util.List;
 

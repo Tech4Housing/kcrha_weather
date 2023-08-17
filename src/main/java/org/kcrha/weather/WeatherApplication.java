@@ -2,12 +2,9 @@ package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
 import org.kcrha.weather.data_collectors.WeatherForecastCollector;
-import org.kcrha.weather.records.DailyWeatherForecast;
+import org.kcrha.weather.models.DailyWeatherForecast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WeatherApplication {
 	public static void main(String[] args) {
@@ -22,13 +19,7 @@ public class WeatherApplication {
 			} else {
 				WeatherForecastCollector weatherForecastCollector = new WeatherForecastCollector();
 				List<DailyWeatherForecast> dailyWeatherForecastList = weatherForecastCollector.retrieveDailyForecasts(1)
-						.stream().sorted((forecast1, forecast2) -> {
-					try {
-						return forecast1.getDate().compareTo(forecast2.getDate());
-					} catch (java.text.ParseException e) {
-						throw new RuntimeException(e);
-					}
-				}).toList();
+						.stream().sorted(Comparator.comparing(DailyWeatherForecast::getDay)).toList();
 				for (DailyWeatherForecast dailyWeatherForecast : dailyWeatherForecastList) {
 					System.out.printf("Date: %s, Temp Low: %s, Temp High: %s\n", dailyWeatherForecast.day, dailyWeatherForecast.temperatureLow, dailyWeatherForecast.temperatureHigh);
 				}

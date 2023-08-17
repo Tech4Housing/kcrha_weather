@@ -1,4 +1,4 @@
-package org.kcrha.weather.records;
+package org.kcrha.weather.models;
 
 public class DailyAirQualityForecast {
 }
