@@ -38,7 +38,6 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
     }
 
     private List<DailyAirQualityForecast> handleResponse(List<Forecast> forecasts) {
-
         return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), forecast.AQI())).toList();
     }
 }
