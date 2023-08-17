@@ -30,14 +30,14 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
 
-            return handleRequest(List.of(gson.fromJson(response.body(), Forecast[].class)));
+            return handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class)));
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DailyAirQualityForecast> handleRequest(List<Forecast> forecasts) {
+    private List<DailyAirQualityForecast> handleResponse(List<Forecast> forecasts) {
 
         return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), forecast.AQI())).toList();
     }

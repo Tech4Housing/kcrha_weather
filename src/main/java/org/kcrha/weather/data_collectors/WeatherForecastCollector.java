@@ -25,19 +25,18 @@ public class WeatherForecastCollector implements ForecastCollector<DailyWeatherF
 
             HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://api.weather.gov/gridpoints/SEW/125,68/forecast/hourly")).GET().timeout(Duration.ofSeconds(10)).build();
 
-            return handleRequest(client.send(request, HttpResponse.BodyHandlers.ofString()));
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME)).create();
+
+            return handleResponse(gson.fromJson(response.body(), Forecast.class));
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DailyWeatherForecast> handleRequest(HttpResponse<String> response) {
+    private List<DailyWeatherForecast> handleResponse(Forecast nwsForecast) {
         Map<LocalDate, DailyWeatherForecast> dailyForecasts = new HashMap<>();
-
-        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME)).create();
-
-        Forecast nwsForecast = gson.fromJson(response.body(), Forecast.class);
 
         for (ForecastPeriod period : nwsForecast.properties().periods()) {
             LocalDate periodDate = period.startTime();
