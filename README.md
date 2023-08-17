@@ -3,10 +3,16 @@
 This repo maintains the logic to scrape publicly available data, as well as notify personnel about any upcoming severe weather patterns that require activation of public outreach resources
 
 **Table of Contents**
+- [Installation](#installation)
+  - [Dependencies](#dependencies)
 - [Usage](#usage)
   - [Examples](#examples)
 - [Contributing](#contributing)
     - [Makefile Usage](#makefile-usage)
+
+## Installation
+Prerequisites:
+* OpenJDK 17
 
 ## Usage
 

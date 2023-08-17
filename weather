@@ -1,0 +1,9 @@
+#!/bin/bash
+
+args="$*"
+if [ -z $args ];
+then
+    args="default"
+fi
+
+./gradlew bootRun --args="$args"
