@@ -1,15 +1,11 @@
 package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
-import org.kcrha.weather.data_collectors.AirQualityForecastCollector;
-import org.kcrha.weather.data_collectors.WeatherForecastCollector;
-import org.kcrha.weather.models.DailyAggregatedForecast;
-import org.kcrha.weather.models.DailyAirQualityForecast;
-import org.kcrha.weather.models.DailyWeatherForecast;
+import org.kcrha.weather.aggregators.AggregateTemperatureAirQualityService;
+import org.kcrha.weather.aggregators.TemperatureAirQualityForecast;
+import org.kcrha.weather.alerts.ConsoleService;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class WeatherApplication {
     public static void main(String[] args) {
@@ -22,28 +18,11 @@ public class WeatherApplication {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("weather", options);
             } else {
-                WeatherForecastCollector weatherForecastCollector = new WeatherForecastCollector();
-                Map<LocalDate, DailyWeatherForecast> weatherForecasts = weatherForecastCollector.retrieveDailyForecasts(1)
-                        .stream().collect(Collectors.toMap(DailyWeatherForecast::getDay, dailyWeatherForecast -> dailyWeatherForecast));
-                AirQualityForecastCollector airQualityForecastCollector = new AirQualityForecastCollector();
-                Map<LocalDate, DailyAirQualityForecast> airQualityForecasts = airQualityForecastCollector.retrieveDailyForecasts(1)
-                        .stream().collect(Collectors.toMap(DailyAirQualityForecast::getDay, dailyWeatherForecast -> dailyWeatherForecast));
+                AggregateTemperatureAirQualityService forecastAggregateService = new AggregateTemperatureAirQualityService();
+                List<TemperatureAirQualityForecast> aggregatedForecasts = forecastAggregateService.getForecasts();
 
-                List<DailyAggregatedForecast> aggregatedForecasts = new ArrayList<>();
-                for (Map.Entry<LocalDate, DailyWeatherForecast> entry : weatherForecasts.entrySet()) {
-                    DailyWeatherForecast dailyWeatherForecast = entry.getValue();
-                    Integer aqi = airQualityForecasts.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
-                    aggregatedForecasts.add(DailyAggregatedForecast.builder()
-                                    .day(dailyWeatherForecast.getDay())
-                                    .airQualityIndex(aqi)
-                                    .temperatureLow(dailyWeatherForecast.getTemperatureLow())
-                                    .temperatureHigh(dailyWeatherForecast.getTemperatureHigh())
-                            .build());
-                }
-
-                aggregatedForecasts.stream().sorted(Comparator.comparing(DailyAggregatedForecast::getDay)).forEach(dailyAggregatedForecast -> {
-                    System.out.printf("Date: %s, Temp Low: %s, Temp High: %s, AQI: %s\n", dailyAggregatedForecast.getDay(), dailyAggregatedForecast.getTemperatureLow(), dailyAggregatedForecast.getTemperatureHigh(), dailyAggregatedForecast.getAirQualityIndex());
-                });
+                ConsoleService consoleService = new ConsoleService();
+                consoleService.sendAlert(aggregatedForecasts);
             }
         } catch (ParseException exp) {
             System.err.println("Parsing command line options failed.  Reason: " + exp.getMessage());

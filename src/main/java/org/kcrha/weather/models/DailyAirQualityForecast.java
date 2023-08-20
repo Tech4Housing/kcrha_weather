@@ -9,7 +9,12 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyAirQualityForecast {
+public class DailyAirQualityForecast implements DailyForecast {
     LocalDate day;
     Integer airQualityIndex;
+
+    @Override
+    public LocalDate getDate() {
+        return day;
+    }
 }

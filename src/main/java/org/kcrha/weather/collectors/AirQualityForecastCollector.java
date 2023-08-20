@@ -1,9 +1,9 @@
-package org.kcrha.weather.data_collectors;
+package org.kcrha.weather.collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import org.kcrha.weather.external_api.airnow.Forecast;
+import org.kcrha.weather.collectors.api.airnow.Forecast;
 import org.kcrha.weather.models.DailyAirQualityForecast;
 
 import java.io.IOException;
@@ -15,8 +15,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.*;
 
 public class AirQualityForecastCollector implements ForecastCollector<DailyAirQualityForecast> {

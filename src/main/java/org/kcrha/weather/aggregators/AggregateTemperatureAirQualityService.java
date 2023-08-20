@@ -1,0 +1,37 @@
+package org.kcrha.weather.aggregators;
+
+import org.kcrha.weather.collectors.AirQualityForecastCollector;
+import org.kcrha.weather.collectors.TemperatureForecastCollector;
+import org.kcrha.weather.models.DailyAirQualityForecast;
+import org.kcrha.weather.models.DailyTemperatureForecast;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class AggregateTemperatureAirQualityService implements AggregateService<TemperatureAirQualityForecast> {
+    public List<TemperatureAirQualityForecast> getForecasts() {
+        TemperatureForecastCollector temperatureForecastCollector = new TemperatureForecastCollector();
+        Map<LocalDate, DailyTemperatureForecast> temperatureForecasts = temperatureForecastCollector.retrieveDailyForecasts(1)
+                .stream().collect(Collectors.toMap(DailyTemperatureForecast::getDay, dailyTemperatureForecast -> dailyTemperatureForecast));
+        AirQualityForecastCollector airQualityForecastCollector = new AirQualityForecastCollector();
+        Map<LocalDate, DailyAirQualityForecast> airQualityForecasts = airQualityForecastCollector.retrieveDailyForecasts(1)
+                .stream().collect(Collectors.toMap(DailyAirQualityForecast::getDay, dailyTemperatureForecast -> dailyTemperatureForecast));
+
+        java.util.List<TemperatureAirQualityForecast> aggregatedForecasts = new ArrayList<>();
+        for (Map.Entry<LocalDate, DailyTemperatureForecast> entry : temperatureForecasts.entrySet()) {
+            DailyTemperatureForecast dailyTemperatureForecast = entry.getValue();
+            Integer aqi = airQualityForecasts.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
+            aggregatedForecasts.add(TemperatureAirQualityForecast.builder()
+                    .day(dailyTemperatureForecast.getDay())
+                    .airQualityIndex(aqi)
+                    .temperatureLow(dailyTemperatureForecast.getTemperatureLow())
+                    .temperatureHigh(dailyTemperatureForecast.getTemperatureHigh())
+                    .build());
+        }
+
+        return aggregatedForecasts;
+    }
+}

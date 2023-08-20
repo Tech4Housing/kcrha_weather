@@ -10,8 +10,14 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyWeatherForecast {
+public class DailyTemperatureForecast implements DailyForecast {
     public LocalDate day;
     public Integer temperatureHigh;
+    public Float temperatureAverage;
     public Integer temperatureLow;
+
+    @Override
+    public LocalDate getDate() {
+        return day;
+    }
 }

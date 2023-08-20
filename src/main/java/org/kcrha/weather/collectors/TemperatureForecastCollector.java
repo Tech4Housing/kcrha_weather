@@ -1,12 +1,11 @@
-package org.kcrha.weather.data_collectors;
+package org.kcrha.weather.collectors;
 
 import com.google.gson.*;
-import org.kcrha.weather.external_api.nws.Forecast;
-import org.kcrha.weather.external_api.nws.ForecastPeriod;
-import org.kcrha.weather.models.DailyWeatherForecast;
+import org.kcrha.weather.collectors.api.nws.Forecast;
+import org.kcrha.weather.collectors.api.nws.ForecastPeriod;
+import org.kcrha.weather.models.DailyTemperatureForecast;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -16,10 +15,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class WeatherForecastCollector implements ForecastCollector<DailyWeatherForecast> {
+public class TemperatureForecastCollector implements ForecastCollector<DailyTemperatureForecast> {
     @Override
-    public List<DailyWeatherForecast> retrieveDailyForecasts(Integer days) {
+    public List<DailyTemperatureForecast> retrieveDailyForecasts(Integer days) {
         try {
             HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
 
@@ -35,17 +35,23 @@ public class WeatherForecastCollector implements ForecastCollector<DailyWeatherF
         }
     }
 
-    private List<DailyWeatherForecast> handleResponse(Forecast nwsForecast) {
-        Map<LocalDate, DailyWeatherForecast> dailyForecasts = new HashMap<>();
+    private List<DailyTemperatureForecast> handleResponse(Forecast nwsForecast) {
+        Map<LocalDate, List<Integer>> dailyTemperatures = new HashMap<>();
 
         for (ForecastPeriod period : nwsForecast.properties().periods()) {
             LocalDate periodDate = period.startTime();
-            DailyWeatherForecast dailyForecast = dailyForecasts.getOrDefault(periodDate, DailyWeatherForecast.builder().day(periodDate).build());
-            dailyForecast.setTemperatureLow(dailyForecast.getTemperatureLow() == null || dailyForecast.getTemperatureLow() > period.temperature() ? period.temperature() : dailyForecast.getTemperatureLow());
-            dailyForecast.setTemperatureHigh(dailyForecast.getTemperatureHigh() == null || period.temperature() > dailyForecast.getTemperatureHigh() ? period.temperature() : dailyForecast.getTemperatureHigh());
-            dailyForecasts.put(periodDate, dailyForecast);
+            List<Integer> dailyTemperature = dailyTemperatures.getOrDefault(periodDate, new ArrayList<>());
+            dailyTemperature.add(period.temperature());
+            dailyTemperatures.put(periodDate, dailyTemperature);
         }
 
-        return dailyForecasts.values().stream().toList();
+        return dailyTemperatures.entrySet().stream().map(entry -> {
+            final List<Integer> temperatures = entry.getValue();
+            return DailyTemperatureForecast.builder()
+                    .day(entry.getKey())
+                    .temperatureHigh(Collections.max(temperatures))
+                    .temperatureAverage((float) temperatures.stream().reduce(0, Integer::sum) / temperatures.size())
+                    .temperatureLow(Collections.min(temperatures)).build();
+        }).collect(Collectors.toList());
     }
 }

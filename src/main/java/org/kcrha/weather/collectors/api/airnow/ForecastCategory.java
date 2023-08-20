@@ -1,4 +1,4 @@
-package org.kcrha.weather.external_api.airnow;
+package org.kcrha.weather.collectors.api.airnow;
 
 public record ForecastCategory(
         Integer Number,

@@ -1,7 +1,6 @@
-package org.kcrha.weather.external_api.nws;
+package org.kcrha.weather.collectors.api.nws;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 
 public record ForecastPeriod(
         Integer number,

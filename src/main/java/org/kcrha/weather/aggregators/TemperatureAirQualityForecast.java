@@ -1,6 +1,7 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.aggregators;
 
 import lombok.*;
+import org.kcrha.weather.models.DailyForecast;
 
 import java.time.LocalDate;
 
@@ -9,9 +10,14 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyAggregatedForecast {
+public class TemperatureAirQualityForecast implements DailyForecast {
     LocalDate day;
     Integer airQualityIndex;
     public Integer temperatureHigh;
     public Integer temperatureLow;
+
+    @Override
+    public LocalDate getDate() {
+        return day;
+    }
 }
