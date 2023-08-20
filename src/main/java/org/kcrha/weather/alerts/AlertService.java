@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AlertService {
 
-    public boolean sendAlert(List<AggregateForecast> forecasts);
+    public boolean sendAlert(List<? extends AggregateForecast> forecasts);
 }

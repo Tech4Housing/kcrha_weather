@@ -26,6 +26,9 @@ public class BasicAggregateForecast implements AggregateForecast {
 
     @Override
     public List<ForecastMetric> getMetrics() {
-        return List.of(airQualityIndex, temperatureHigh, temperatureAverage, temperatureLow);
+        return List.of(airQualityIndex == null ? new AirQualityMetric(null) : airQualityIndex,
+                temperatureHigh,
+                temperatureAverage,
+                temperatureLow);
     }
 }

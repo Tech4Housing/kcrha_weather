@@ -12,6 +12,6 @@ abstract public class TemperatureBase implements ForecastMetric {
 
     @Override
     public String getValue() {
-        return String.valueOf(value);
+        return String.valueOf(Math.round(value));
     }
 }

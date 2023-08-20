@@ -10,7 +10,7 @@ public class MailingService implements AlertService {
 
 
     @Override
-    public boolean sendAlert(List<AggregateForecast> forecasts) {
+    public boolean sendAlert(List<? extends AggregateForecast> forecasts) {
         try {
             sendEmail(forecasts);
         } catch (EmailException e) {
@@ -20,7 +20,7 @@ public class MailingService implements AlertService {
         return true;
     }
 
-    private void sendEmail(List<AggregateForecast> forecasts) throws EmailException {
+    private void sendEmail(List<? extends AggregateForecast> forecasts) throws EmailException {
         // Create the email message
         HtmlEmail email = new HtmlEmail();
         email.setHostName("mail.myserver.com");

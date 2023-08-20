@@ -15,6 +15,10 @@ public class AirQualityMetric implements ForecastMetric {
 
     @Override
     public String getValue() {
-        return String.valueOf(value);
+        if (value == null) {
+            return "N/A";
+        } else {
+            return String.valueOf(value);
+        }
     }
 }

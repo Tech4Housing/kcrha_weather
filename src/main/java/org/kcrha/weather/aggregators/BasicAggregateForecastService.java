@@ -30,6 +30,7 @@ public class BasicAggregateForecastService implements AggregateService<BasicAggr
                     .day(dailyTemperatureForecast.getDay())
                     .airQualityIndex(aqi)
                     .temperatureLow(dailyTemperatureForecast.getTemperatureLow())
+                    .temperatureAverage(dailyTemperatureForecast.getTemperatureAverage())
                     .temperatureHigh(dailyTemperatureForecast.getTemperatureHigh())
                     .build());
         }
