@@ -26,6 +26,7 @@ repositories {
 
 dependencies {
 	implementation("commons-cli:commons-cli:1.4")
+	implementation("org.apache.commons:commons-email:1.5")
 	implementation("com.google.code.gson:gson:2.10.1")
 	compileOnly("org.projectlombok:lombok:1.18.24")
 	annotationProcessor("org.projectlombok:lombok:1.18.24")

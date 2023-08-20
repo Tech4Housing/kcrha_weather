@@ -4,6 +4,9 @@ import com.google.gson.*;
 import org.kcrha.weather.collectors.api.nws.Forecast;
 import org.kcrha.weather.collectors.api.nws.ForecastPeriod;
 import org.kcrha.weather.models.DailyTemperatureForecast;
+import org.kcrha.weather.models.metrics.TemperatureAverage;
+import org.kcrha.weather.models.metrics.TemperatureHigh;
+import org.kcrha.weather.models.metrics.TemperatureLow;
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,9 +52,9 @@ public class TemperatureForecastCollector implements ForecastCollector<DailyTemp
             final List<Integer> temperatures = entry.getValue();
             return DailyTemperatureForecast.builder()
                     .day(entry.getKey())
-                    .temperatureHigh(Collections.max(temperatures))
-                    .temperatureAverage((float) temperatures.stream().reduce(0, Integer::sum) / temperatures.size())
-                    .temperatureLow(Collections.min(temperatures)).build();
+                    .temperatureHigh(new TemperatureHigh(Float.valueOf(Collections.max(temperatures))))
+                    .temperatureAverage(new TemperatureAverage((float) temperatures.stream().reduce(0, Integer::sum) / temperatures.size()))
+                    .temperatureLow(new TemperatureLow(Float.valueOf(Collections.min(temperatures)))).build();
         }).collect(Collectors.toList());
     }
 }

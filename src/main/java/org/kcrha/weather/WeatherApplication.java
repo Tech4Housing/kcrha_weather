@@ -1,8 +1,8 @@
 package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
-import org.kcrha.weather.aggregators.AggregateTemperatureAirQualityService;
-import org.kcrha.weather.aggregators.TemperatureAirQualityForecast;
+import org.kcrha.weather.aggregators.BasicAggregateForecastService;
+import org.kcrha.weather.models.BasicAggregateForecast;
 import org.kcrha.weather.alerts.ConsoleService;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public class WeatherApplication {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("weather", options);
             } else {
-                AggregateTemperatureAirQualityService forecastAggregateService = new AggregateTemperatureAirQualityService();
-                List<TemperatureAirQualityForecast> aggregatedForecasts = forecastAggregateService.getForecasts();
+                BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService();
+                List<BasicAggregateForecast> aggregatedForecasts = forecastAggregateService.getForecasts();
 
                 ConsoleService consoleService = new ConsoleService();
                 consoleService.sendAlert(aggregatedForecasts);
