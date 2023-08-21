@@ -2,6 +2,7 @@ package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
 import org.kcrha.weather.aggregators.BasicAggregateForecastService;
+import org.kcrha.weather.alerts.MailingService;
 import org.kcrha.weather.models.BasicAggregateForecast;
 import org.kcrha.weather.alerts.ConsoleService;
 
@@ -21,8 +22,9 @@ public class WeatherApplication {
                 BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService();
                 List<BasicAggregateForecast> aggregatedForecasts = forecastAggregateService.getForecasts();
 
-                ConsoleService consoleService = new ConsoleService();
-                consoleService.sendAlert(aggregatedForecasts);
+//                ConsoleService alertService = new ConsoleService();
+                MailingService alertService = new MailingService();
+                alertService.sendAlert(aggregatedForecasts);
             }
         } catch (ParseException exp) {
             System.err.println("Parsing command line options failed.  Reason: " + exp.getMessage());
