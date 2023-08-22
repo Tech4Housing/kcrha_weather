@@ -18,6 +18,7 @@ public class BasicAggregateForecast implements AggregateForecast {
     TemperatureHigh temperatureHigh;
     TemperatureAverage temperatureAverage;
     TemperatureLow temperatureLow;
+    HeatRiskIndexMetric heatRiskIndex;
 
     @Override
     public LocalDate getDate() {
@@ -29,6 +30,7 @@ public class BasicAggregateForecast implements AggregateForecast {
         return List.of(airQualityIndex == null ? new AirQualityMetric(null) : airQualityIndex,
                 temperatureHigh,
                 temperatureAverage,
-                temperatureLow);
+                temperatureLow,
+                heatRiskIndex == null ? new HeatRiskIndexMetric(null) : heatRiskIndex);
     }
 }
