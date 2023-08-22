@@ -22,8 +22,8 @@ public class WeatherApplication {
                 BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService();
                 List<BasicAggregateForecast> aggregatedForecasts = forecastAggregateService.getForecasts();
 
-                ConsoleService alertService = new ConsoleService();
-//                MailingService alertService = new MailingService();
+//                ConsoleService alertService = new ConsoleService();
+                MailingService alertService = new MailingService();
                 alertService.sendAlert(aggregatedForecasts);
             }
         } catch (ParseException exp) {
