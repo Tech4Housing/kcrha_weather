@@ -18,4 +18,5 @@ public record ForecastPeriod(
         String icon,
         String shortForecast,
         String detailedForecast
-) {}
+) {
+}

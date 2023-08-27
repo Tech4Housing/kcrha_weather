@@ -4,17 +4,14 @@ import com.google.gson.Gson;
 import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
 import org.kcrha.weather.aggregators.BasicAggregateForecastService;
-import org.kcrha.weather.collectors.api.nws.HeatRisk;
 import org.kcrha.weather.models.cli.Location;
 import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
 import org.kcrha.weather.notifications.ConsoleNotification;
-import org.kcrha.weather.notifications.EmailNotification;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 public class ForecastService implements CommandLineService {

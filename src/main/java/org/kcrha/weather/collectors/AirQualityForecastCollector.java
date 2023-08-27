@@ -8,15 +8,11 @@ import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.metrics.AirQuality;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 public class AirQualityForecastCollector extends BaseForecastCollector<DailyAirQualityForecast> implements ForecastCollector<DailyAirQualityForecast> {
     @Override

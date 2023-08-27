@@ -55,7 +55,6 @@ public class WeatherApplication {
     }
 
 
-
     private static Options getOptions() {
         Options options = new Options();
 

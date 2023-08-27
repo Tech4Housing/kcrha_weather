@@ -35,7 +35,7 @@ public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRis
             HttpRequest request = HttpRequest
                     .newBuilder()
                     .uri(new URI(String.format("https://www.wrh.noaa.gov/wrh/heatrisk/php/getValsByLatLon.php?lat=%s&lon=%s&days=%s", latitude, longitude, dates)))
-                    .header("Accept","application/json, text/javascript, */*; q=0.01")
+                    .header("Accept", "application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Language", "en-US,en;q=0.9")
                     .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15")
                     .header("Referer", "https://www.wrh.noaa.gov/wrh/heatrisk/")

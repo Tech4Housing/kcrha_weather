@@ -1,23 +1,20 @@
 package org.kcrha.weather.collectors;
 
-import com.google.gson.*;
-import org.kcrha.weather.collectors.api.nws.ForecastResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import org.kcrha.weather.collectors.api.nws.ForecastPeriod;
+import org.kcrha.weather.collectors.api.nws.ForecastResponse;
 import org.kcrha.weather.collectors.api.nws.GridResponse;
 import org.kcrha.weather.collectors.api.nws.GridResponseProperties;
-import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.DailyTemperatureForecast;
 import org.kcrha.weather.models.forecast.metrics.TemperatureAverage;
 import org.kcrha.weather.models.forecast.metrics.TemperatureHigh;
 import org.kcrha.weather.models.forecast.metrics.TemperatureLow;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

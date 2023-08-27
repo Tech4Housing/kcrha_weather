@@ -7,6 +7,6 @@ public enum ForecastMetricType {
     AIR_QUALITY_INDEX,
     RAIN_ACCUMULATION,
     SNOW_ACCUMULATION,
-    HEAT_RISK_INDEX;
+    HEAT_RISK_INDEX
 
 }

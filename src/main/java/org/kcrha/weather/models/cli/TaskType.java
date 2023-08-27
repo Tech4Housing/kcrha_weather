@@ -4,6 +4,6 @@ public enum TaskType {
     ALERTS,
     FORECASTS,
     REFRESH,
-    SETUP;
+    SETUP
 
 }
