@@ -1,15 +1,15 @@
-package org.kcrha.weather.models.metrics;
+package org.kcrha.weather.models.forecast.metrics;
 
 import lombok.Getter;
 
 @Getter
-public class HeatRiskIndexMetric implements ForecastMetric {
+public class HeatRiskIndex implements ForecastMetric {
     public final ForecastMetricType type = ForecastMetricType.HEAT_RISK_INDEX;
     public final String shortName = "HeatRisk";
     public final String longName = "HeatRisk Index";
     public Integer value;
 
-    public HeatRiskIndexMetric(Integer i) {
+    public HeatRiskIndex(Integer i) {
         value = i;
     }
 

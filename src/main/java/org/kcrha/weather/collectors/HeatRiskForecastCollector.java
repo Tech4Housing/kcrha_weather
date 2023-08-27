@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import org.kcrha.weather.collectors.api.nws.HeatRisk;
-import org.kcrha.weather.models.DailyHeatRiskForecast;
-import org.kcrha.weather.models.metrics.HeatRiskIndexMetric;
+import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
+import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.io.IOException;
 import java.net.URI;
@@ -25,7 +25,7 @@ public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRis
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Override
-    public List<DailyHeatRiskForecast> retrieveDailyForecasts(Integer days) {
+    public List<DailyHeatRiskForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         try {
             HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
 
@@ -34,7 +34,7 @@ public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRis
 
             HttpRequest request = HttpRequest
                     .newBuilder()
-                    .uri(new URI(String.format("https://www.wrh.noaa.gov/wrh/heatrisk/php/getValsByLatLon.php?lon=-103.6682&lat=39.9207&days=%s", dates)))
+                    .uri(new URI(String.format("https://www.wrh.noaa.gov/wrh/heatrisk/php/getValsByLatLon.php?lat=%s&lon=%s&days=%s", latitude, longitude, dates)))
                     .header("Accept","application/json, text/javascript, */*; q=0.01")
                     .header("Accept-Language", "en-US,en;q=0.9")
                     .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15")
@@ -49,13 +49,13 @@ public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRis
 
             return handleResponse(List.of(gson.fromJson(response.body(), HeatRisk[].class)));
 
-        } catch (URISyntaxException | IOException | InterruptedException e) {
+        } catch (URISyntaxException | IOException | InterruptedException | IllegalStateException e) {
             throw new RuntimeException(e);
         }
     }
 
     private List<DailyHeatRiskForecast> handleResponse(List<HeatRisk> heatRiskForecasts) {
 
-        return heatRiskForecasts.stream().map(heatRiskForecast -> new DailyHeatRiskForecast(LocalDate.parse(heatRiskForecast.date(), dtf), new HeatRiskIndexMetric(Integer.parseInt(heatRiskForecast.heatrisk().replace(".0", ""))))).toList();
+        return heatRiskForecasts.stream().map(heatRiskForecast -> new DailyHeatRiskForecast(LocalDate.parse(heatRiskForecast.date(), dtf), new HeatRiskIndex(Integer.parseInt(heatRiskForecast.heatrisk().replace(".0", ""))))).toList();
     }
 }

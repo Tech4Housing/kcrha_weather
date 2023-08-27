@@ -1,20 +1,19 @@
-package org.kcrha.weather.alerts;
+package org.kcrha.weather.notifications;
 
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.kcrha.weather.models.AggregateForecast;
-import org.kcrha.weather.models.metrics.ForecastMetric;
-import org.kcrha.weather.models.metrics.ForecastMetricType;
+import org.kcrha.weather.models.forecast.AggregateForecast;
+import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
+import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MailingService implements AlertService {
+public class EmailNotification implements Notification {
 
 
     @Override
-    public boolean sendAlert(List<? extends AggregateForecast> forecasts) {
+    public boolean send(List<? extends AggregateForecast> forecasts) {
         try {
             sendEmail(forecasts);
         } catch (EmailException e) {

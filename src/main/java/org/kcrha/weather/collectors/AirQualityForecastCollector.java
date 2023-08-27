@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import org.kcrha.weather.collectors.api.airnow.Forecast;
-import org.kcrha.weather.models.DailyAirQualityForecast;
-import org.kcrha.weather.models.metrics.AirQualityMetric;
+import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
+import org.kcrha.weather.models.forecast.metrics.AirQuality;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,15 +18,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class AirQualityForecastCollector implements ForecastCollector<DailyAirQualityForecast> {
+public class AirQualityForecastCollector extends BaseForecastCollector<DailyAirQualityForecast> implements ForecastCollector<DailyAirQualityForecast> {
     @Override
-    public List<DailyAirQualityForecast> retrieveDailyForecasts(Integer days) {
+    public List<DailyAirQualityForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         try {
-            HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
-
-            HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=47.6041&longitude=-122.3282&distance=25&API_KEY=***REMOVED***")).GET().timeout(Duration.ofSeconds(10)).build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = getRetryableResponse(String.format("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=%s&longitude=%s&distance=25&API_KEY=***REMOVED***", latitude, longitude), 10);
             Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
 
             return handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class)));
@@ -37,6 +33,6 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
     }
 
     private List<DailyAirQualityForecast> handleResponse(List<Forecast> forecasts) {
-        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQualityMetric(forecast.AQI()))).toList();
+        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQuality(forecast.AQI()))).toList();
     }
 }

@@ -1,4 +1,4 @@
-package org.kcrha.weather.models.metrics;
+package org.kcrha.weather.models.forecast.metrics;
 
 import lombok.Getter;
 

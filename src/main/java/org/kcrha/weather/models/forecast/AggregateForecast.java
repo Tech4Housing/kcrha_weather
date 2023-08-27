@@ -1,6 +1,6 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.models.forecast;
 
-import org.kcrha.weather.models.metrics.ForecastMetric;
+import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 
 import java.time.LocalDate;
 import java.util.List;

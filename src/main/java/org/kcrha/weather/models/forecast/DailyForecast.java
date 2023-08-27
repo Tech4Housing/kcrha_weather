@@ -1,4 +1,4 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.models.forecast;
 
 import java.time.LocalDate;
 

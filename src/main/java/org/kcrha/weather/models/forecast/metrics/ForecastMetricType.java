@@ -1,4 +1,4 @@
-package org.kcrha.weather.models.metrics;
+package org.kcrha.weather.models.forecast.metrics;
 
 public enum ForecastMetricType {
     TEMPERATURE_HIGH,

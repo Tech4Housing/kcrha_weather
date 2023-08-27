@@ -1,10 +1,10 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.models.forecast;
 
 
 import lombok.*;
-import org.kcrha.weather.models.metrics.TemperatureAverage;
-import org.kcrha.weather.models.metrics.TemperatureHigh;
-import org.kcrha.weather.models.metrics.TemperatureLow;
+import org.kcrha.weather.models.forecast.metrics.TemperatureAverage;
+import org.kcrha.weather.models.forecast.metrics.TemperatureHigh;
+import org.kcrha.weather.models.forecast.metrics.TemperatureLow;
 
 import java.time.LocalDate;
 

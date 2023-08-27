@@ -1,7 +1,7 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.models.forecast;
 
 import lombok.*;
-import org.kcrha.weather.models.metrics.AirQualityMetric;
+import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.time.LocalDate;
 
@@ -10,9 +10,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyAirQualityForecast implements DailyForecast {
+public class DailyHeatRiskForecast implements DailyForecast {
     LocalDate day;
-    AirQualityMetric airQualityIndex;
+    HeatRiskIndex heatRiskIndex;
 
     @Override
     public LocalDate getDate() {

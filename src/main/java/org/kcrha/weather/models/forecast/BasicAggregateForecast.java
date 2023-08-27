@@ -1,11 +1,10 @@
-package org.kcrha.weather.models;
+package org.kcrha.weather.models.forecast;
 
 import lombok.*;
-import org.kcrha.weather.models.metrics.*;
+import org.kcrha.weather.models.forecast.metrics.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Builder
 @Getter
@@ -14,11 +13,11 @@ import java.util.Map;
 @NoArgsConstructor
 public class BasicAggregateForecast implements AggregateForecast {
     LocalDate day;
-    AirQualityMetric airQualityIndex;
+    AirQuality airQualityIndex;
     TemperatureHigh temperatureHigh;
     TemperatureAverage temperatureAverage;
     TemperatureLow temperatureLow;
-    HeatRiskIndexMetric heatRiskIndex;
+    HeatRiskIndex heatRiskIndex;
 
     @Override
     public LocalDate getDate() {
@@ -27,10 +26,10 @@ public class BasicAggregateForecast implements AggregateForecast {
 
     @Override
     public List<ForecastMetric> getMetrics() {
-        return List.of(airQualityIndex == null ? new AirQualityMetric(null) : airQualityIndex,
+        return List.of(airQualityIndex == null ? new AirQuality(null) : airQualityIndex,
                 temperatureHigh,
                 temperatureAverage,
                 temperatureLow,
-                heatRiskIndex == null ? new HeatRiskIndexMetric(null) : heatRiskIndex);
+                heatRiskIndex == null ? new HeatRiskIndex(null) : heatRiskIndex);
     }
 }
