@@ -5,6 +5,7 @@ import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ public class EmailNotification implements Notification {
         StringBuilder html = new StringBuilder("<table>\n");
 
         List<? extends ForecastMetric> orderedMetrics = null;
+        forecasts.sort(Comparator.comparing(AggregateForecast::getDate));
 
         for (AggregateForecast forecast : forecasts) {
             if (orderedMetrics == null) {

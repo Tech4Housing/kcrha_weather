@@ -8,6 +8,7 @@ import org.kcrha.weather.models.cli.Location;
 import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
 import org.kcrha.weather.notifications.ConsoleNotification;
+import org.kcrha.weather.notifications.EmailNotification;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class ForecastService implements CommandLineService {
     public static final String REGIONS_RESOURCE_FILE_PATH = "regions.json";
 
     public void run(Options options) {
-        ConsoleNotification alertService = new ConsoleNotification();
+        EmailNotification alertService = new EmailNotification();
 
         List<Region> regions = getRegions();
 
