@@ -8,7 +8,7 @@ public class TemperatureLow extends TemperatureBase implements ForecastMetric {
     public final String shortName = "Temp Lo";
     public final String longName = "Temperature Low";
 
-    public TemperatureLow(Float i) {
-        super(i);
+    public TemperatureLow(Float f) {
+        super(f);
     }
 }

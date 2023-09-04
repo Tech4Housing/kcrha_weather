@@ -7,7 +7,7 @@ import org.kcrha.weather.models.forecast.BasicAggregateForecast;
 import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
 import org.kcrha.weather.models.forecast.DailyTemperatureForecast;
-import org.kcrha.weather.models.forecast.metrics.AirQuality;
+import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
 import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.time.LocalDate;
@@ -39,7 +39,7 @@ public class BasicAggregateForecastService implements AggregateService<BasicAggr
         java.util.List<BasicAggregateForecast> aggregatedForecasts = new ArrayList<>();
         for (Map.Entry<LocalDate, DailyTemperatureForecast> entry : temperatureForecasts.entrySet()) {
             DailyTemperatureForecast dailyTemperatureForecast = entry.getValue();
-            AirQuality aqi = airQualityForecasts.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
+            AirQualityIndex aqi = airQualityForecasts.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
             HeatRiskIndex hri = heatRiskForecasts.getOrDefault(entry.getKey(), DailyHeatRiskForecast.builder().build()).getHeatRiskIndex();
             aggregatedForecasts.add(BasicAggregateForecast.builder()
                     .day(dailyTemperatureForecast.getDay())

@@ -2,73 +2,100 @@ package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.mail.Email;
 import org.kcrha.weather.models.cli.TaskType;
-
-import java.util.List;
+import org.kcrha.weather.notifications.ConsoleNotification;
+import org.kcrha.weather.notifications.EmailNotification;
 
 public class WeatherApplication {
 
+    final static Options OPTIONS = getOptions();
+
 
     public static void main(String[] args) {
-        Options options = getOptions();
 
         CommandLineParser parser = new DefaultParser();
         try {
-            CommandLine line = parser.parse(options, args);
+            CommandLine line = parser.parse(OPTIONS, args);
             if (line.getArgList().isEmpty()) {
-                presentHelp(options);
+                presentHelp();
             } else {
-                run(options, line.getArgList());
+                run(line);
             }
         } catch (ParseException exp) {
             System.err.println("Parsing command line options failed.  Reason: " + exp.getMessage());
         }
     }
 
-    private static void presentHelp(Options options) {
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("weather [task]", options);
-    }
+    private static void run(CommandLine line) {
 
-    private static void run(Options options, List<String> args) {
-
-        if (args.size() != 1) {
+        if (line.getArgList().size() != 1) {
             System.out.println("weather requires exactly 1 task argument!");
-            presentHelp(options);
+            presentHelp();
             return;
         }
 
-        String attemptedTask = args.get(0);
+        String attemptedTask = line.getArgList().get(0);
         if (!EnumUtils.isValidEnum(TaskType.class, attemptedTask.toUpperCase())) {
             System.out.printf("%s is not a valid task!%n", attemptedTask);
-            presentHelp(options);
+            presentHelp();
             return;
         }
 
         TaskType task = TaskType.valueOf(attemptedTask.toUpperCase());
+
+        OPTIONS.addOptionGroup(task.getOptionGroup());
+
+        if (line.hasOption("help")) {
+            presentHelp(task);
+            return;
+        }
+
         switch (task) {
-            case ALERTS -> new AlertService().run(options);
-            case FORECASTS -> new ForecastService().run(options);
-            case REFRESH -> new RefreshService().run(options);
+            case ALERTS -> {
+                ConsoleNotification notification = new ConsoleNotification();
+                new AlertService(notification).run(OPTIONS);
+            }
+            case FORECASTS -> {
+//                ConsoleNotification notification = new ConsoleNotification();
+                EmailNotification notification = new EmailNotification();
+                new ForecastService(notification).run(OPTIONS);
+            }
+            case REFRESH -> new RefreshService().run(OPTIONS);
+            case SETUP -> new SetupService().run(OPTIONS);
             default -> throw new RuntimeException(String.format("Unknown TaskType: %s", task));
         }
     }
 
+    private static void presentHelp() {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("weather [task]", OPTIONS);
+    }
+
+    private static void presentHelp(TaskType task) {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.setOptionComparator(null);
+        formatter.printHelp(String.format("weather %s", task.getTaskName()), OPTIONS);
+    }
 
     private static Options getOptions() {
+        OptionGroup sharedOptionGroup = new OptionGroup();
+
+        Option help = Option.builder("h").longOpt("help").desc("Print this message").build();
+        Option quiet = Option.builder("q").longOpt("quiet").desc("Suppress warning and error logs").build();
+        Option verbose = Option.builder("v").longOpt("verbose").desc("Print additional logs").build();
+        Option debug = Option.builder("d").longOpt("debug").desc("Print debug logs").build();
+        Option version = Option.builder().longOpt("version").desc("Print the version information and exit").build();
+
+        sharedOptionGroup.addOption(help);
+        sharedOptionGroup.addOption(quiet);
+        sharedOptionGroup.addOption(verbose);
+        sharedOptionGroup.addOption(debug);
+        sharedOptionGroup.addOption(version);
+
         Options options = new Options();
+        options.addOptionGroup(sharedOptionGroup);
 
-        Option help = new Option("h", "help", false, "Print this message");
-        Option version = new Option("v", "version", false, "Print the version information and exit");
-        Option quiet = new Option("q", "quiet", false, "Suppress warning and error logs");
-        Option verbose = new Option("v", "verbose", false, "Print additional logs");
-        Option debug = new Option("d", "debug", false, "Print debug logs");
-
-        options.addOption(help);
-        options.addOption(version);
-        options.addOption(quiet);
-        options.addOption(verbose);
-        options.addOption(debug);
         return options;
     }
 }

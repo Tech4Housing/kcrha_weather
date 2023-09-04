@@ -1,17 +1,19 @@
 package org.kcrha.weather.notifications;
 
+import lombok.Getter;
 import org.apache.commons.mail.EmailException;
 import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
+import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Getter
 public class EmailNotification implements Notification {
-
 
     @Override
     public boolean send(List<? extends AggregateForecast> forecasts) {
@@ -60,8 +62,18 @@ public class EmailNotification implements Notification {
             html.append("<tr><td>");
             html.append(forecast.getDate());
             html.append("</td><td>");
-            Map<ForecastMetricType, String> metrics = forecast.getMetrics().stream().collect(Collectors.toMap(ForecastMetric::getType, ForecastMetric::getValue));
-            html.append(orderedMetrics.stream().map(orderedMetric -> metrics.getOrDefault(orderedMetric.getType(), "N/A")).collect(Collectors.joining("</td><td>")));
+            Map<ForecastMetricType, ForecastMetric> metrics = forecast.getMetrics().stream().collect(Collectors.toMap(ForecastMetric::getType, e -> e));
+            html.append(orderedMetrics.stream().map(orderedMetric -> {
+                if (metrics.get(orderedMetric.getType()) == null) {
+                    return "N/A";
+                }
+
+                if (orderedMetric.getType().equals(ForecastMetricType.HEAT_RISK_INDEX)
+                        && metrics.get(orderedMetric.getType()) instanceof HeatRiskIndex) {
+                    return ((HeatRiskIndex) metrics.get(orderedMetric.getType())).getHtmlSpan();
+                }
+                return metrics.get(orderedMetric.getType()).getValue();
+            }).collect(Collectors.joining("</td><td>")));
             html.append("</td></tr>\n");
         }
 

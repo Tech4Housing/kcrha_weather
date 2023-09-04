@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import org.kcrha.weather.collectors.api.airnow.Forecast;
 import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
-import org.kcrha.weather.models.forecast.metrics.AirQuality;
+import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -29,6 +29,6 @@ public class AirQualityForecastCollector extends BaseForecastCollector<DailyAirQ
     }
 
     private List<DailyAirQualityForecast> handleResponse(List<Forecast> forecasts) {
-        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQuality(forecast.AQI()))).toList();
+        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQualityIndex(forecast.AQI()))).toList();
     }
 }

@@ -12,12 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasicAggregateForecast implements AggregateForecast {
-    LocalDate day;
-    AirQuality airQualityIndex;
-    TemperatureHigh temperatureHigh;
-    TemperatureAverage temperatureAverage;
-    TemperatureLow temperatureLow;
-    HeatRiskIndex heatRiskIndex;
+    private LocalDate day;
+    private AirQualityIndex airQualityIndex;
+    private TemperatureHigh temperatureHigh;
+    private TemperatureAverage temperatureAverage;
+    private TemperatureLow temperatureLow;
+    private HeatRiskIndex heatRiskIndex;
 
     @Override
     public LocalDate getDate() {
@@ -26,7 +26,7 @@ public class BasicAggregateForecast implements AggregateForecast {
 
     @Override
     public List<ForecastMetric> getMetrics() {
-        return List.of(airQualityIndex == null ? new AirQuality(null) : airQualityIndex,
+        return List.of(airQualityIndex == null ? new AirQualityIndex(null) : airQualityIndex,
                 temperatureHigh,
                 temperatureAverage,
                 temperatureLow,

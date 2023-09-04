@@ -1,7 +1,7 @@
 package org.kcrha.weather.models.forecast;
 
 import lombok.*;
-import org.kcrha.weather.models.forecast.metrics.AirQuality;
+import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DailyAirQualityForecast implements DailyForecast {
     LocalDate day;
-    AirQuality airQualityIndex;
+    AirQualityIndex airQualityIndex;
 
     @Override
     public LocalDate getDate() {

@@ -8,7 +8,7 @@ public class TemperatureAverage extends TemperatureBase implements ForecastMetri
     public final String shortName = "Temp Avg";
     public final String longName = "Temperature Average";
 
-    public TemperatureAverage(Float i) {
-        super(i);
+    public TemperatureAverage(Float f) {
+        super(f);
     }
 }
