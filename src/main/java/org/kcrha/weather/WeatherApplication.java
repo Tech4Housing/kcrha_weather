@@ -6,6 +6,7 @@ import org.apache.commons.mail.Email;
 import org.kcrha.weather.models.cli.TaskType;
 import org.kcrha.weather.notifications.ConsoleNotification;
 import org.kcrha.weather.notifications.EmailNotification;
+import org.kcrha.weather.notifications.HtmlNotificationFormatter;
 
 public class WeatherApplication {
 
@@ -54,12 +55,13 @@ public class WeatherApplication {
         switch (task) {
             case ALERTS -> {
                 ConsoleNotification notification = new ConsoleNotification();
-                new AlertService(notification).run(OPTIONS);
+                HtmlNotificationFormatter formatter = new HtmlNotificationFormatter();
+                new AlertService(notification, formatter).run(OPTIONS);
             }
             case FORECASTS -> {
-//                ConsoleNotification notification = new ConsoleNotification();
-                EmailNotification notification = new EmailNotification();
-                new ForecastService(notification).run(OPTIONS);
+                ConsoleNotification notification = new ConsoleNotification();
+                HtmlNotificationFormatter formatter = new HtmlNotificationFormatter();
+                new ForecastService(notification, formatter).run(OPTIONS);
             }
             case REFRESH -> new RefreshService().run(OPTIONS);
             case SETUP -> new SetupService().run(OPTIONS);

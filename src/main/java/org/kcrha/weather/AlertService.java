@@ -7,6 +7,7 @@ import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
 import org.kcrha.weather.models.forecast.RegionForecast;
 import org.kcrha.weather.notifications.Notification;
+import org.kcrha.weather.notifications.NotificationFormatter;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -15,9 +16,11 @@ import java.util.Map;
 
 public class AlertService implements CommandLineService {
     private final Notification notification;
+    private final NotificationFormatter formatter;
 
-    public AlertService(Notification n) {
+    public AlertService(Notification n, NotificationFormatter f) {
         notification = n;
+        formatter = f;
     }
 
     public void run(Options options) {

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface Notification {
 
-    boolean send(List<? extends AggregateForecast> forecasts);
+    boolean send(String message);
 }
