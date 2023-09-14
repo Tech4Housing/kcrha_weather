@@ -2,16 +2,6 @@ package org.kcrha.weather.notifications;
 
 import lombok.Getter;
 import org.apache.commons.mail.EmailException;
-import org.kcrha.weather.EmailCssFileReader;
-import org.kcrha.weather.models.forecast.AggregateForecast;
-import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
-import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
-import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 public class EmailNotification implements Notification {

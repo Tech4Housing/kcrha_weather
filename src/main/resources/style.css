@@ -20,10 +20,30 @@ tr:nth-child(odd) {
     background-color: #e2e2e2;
 }
 
+tr.noAlert {
+  color: green;
+}
 
-.regionLocation {
+tr.alertTier1 {
+  color: yellow;
+}
+
+tr.alertTier2 {
+  color: orange;
+}
+
+tr.alertTier3 {
+  color: red;
+}
+
+.forecastTableHeader {
     font-size: 20px;
     font-weight: bold;
+}
+
+.forecastTableFooter {
+    font-size: 12px;
+    font-weight: italics;
 }
 
 .heatRisk-Green {

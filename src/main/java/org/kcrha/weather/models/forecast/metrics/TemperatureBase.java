@@ -14,4 +14,5 @@ abstract public class TemperatureBase implements ForecastMetric {
     public String getValue() {
         return String.valueOf(Math.round(value));
     }
+    public Float getFloatValue() {return value;}
 }

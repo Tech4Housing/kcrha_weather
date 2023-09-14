@@ -41,6 +41,12 @@ public enum TaskType {
                 .desc("Type of notification to be used when complete")
                 .type(NotificationType.class)
                 .build());
+        options.addOption(Option.builder("g")
+                .longOpt("granularity")
+                .required(false)
+                .desc("The granularity for the forecasts (location or region)")
+                .type(ForecastGranularityType.class)
+                .build());
         return options;
     }
 

@@ -2,11 +2,9 @@ package org.kcrha.weather;
 
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.mail.Email;
 import org.kcrha.weather.models.cli.TaskType;
 import org.kcrha.weather.notifications.ConsoleNotification;
-import org.kcrha.weather.notifications.EmailNotification;
-import org.kcrha.weather.notifications.HtmlNotificationFormatter;
+import org.kcrha.weather.notifications.HtmlForecastNotificationFormatter;
 
 public class WeatherApplication {
 
@@ -55,13 +53,11 @@ public class WeatherApplication {
         switch (task) {
             case ALERTS -> {
                 ConsoleNotification notification = new ConsoleNotification();
-                HtmlNotificationFormatter formatter = new HtmlNotificationFormatter();
-                new AlertService(notification, formatter).run(OPTIONS);
+                new AlertService(notification).run(OPTIONS);
             }
             case FORECASTS -> {
                 ConsoleNotification notification = new ConsoleNotification();
-                HtmlNotificationFormatter formatter = new HtmlNotificationFormatter();
-                new ForecastService(notification, formatter).run(OPTIONS);
+                new ForecastService(notification).run(OPTIONS);
             }
             case REFRESH -> new RefreshService().run(OPTIONS);
             case SETUP -> new SetupService().run(OPTIONS);

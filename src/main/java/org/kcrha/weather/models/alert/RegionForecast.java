@@ -1,10 +1,12 @@
-package org.kcrha.weather.models.forecast;
+package org.kcrha.weather.models.alert;
 
 import lombok.*;
 import org.kcrha.weather.models.cli.Region;
+import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -17,21 +19,34 @@ public class RegionForecast implements AggregateForecast {
     private LocalDate day;
     private AirQualityIndex airQualityIndex;
     private TemperatureHigh temperatureHigh;
-    private TemperatureAverage temperatureAverage;
     private TemperatureLow temperatureLow;
     private HeatRiskIndex heatRiskIndex;
 
+    private List<TemperatureAverage> temperatureAverages;
+
 
     public void maxAirQualityIndex(AirQualityIndex aqi) {
-        airQualityIndex = Integer.parseInt(airQualityIndex.getValue()) > Integer.parseInt(aqi.getValue()) ? airQualityIndex : aqi;
+        if (airQualityIndex != null && aqi != null) {
+            airQualityIndex = Integer.parseInt(airQualityIndex.getValue()) > Integer.parseInt(aqi.getValue()) ? airQualityIndex : aqi;
+        } else {
+            airQualityIndex = airQualityIndex == null ? aqi : airQualityIndex;
+        }
     }
 
     public void maxHeatRiskIndex(HeatRiskIndex hri) {
-        heatRiskIndex = Integer.parseInt(heatRiskIndex.getValue()) > Integer.parseInt(hri.getValue()) ? heatRiskIndex : hri;
+        if (airQualityIndex != null && hri != null) {
+            heatRiskIndex = Integer.parseInt(heatRiskIndex.getValue()) > Integer.parseInt(hri.getValue()) ? heatRiskIndex : hri;
+        } else {
+            heatRiskIndex = heatRiskIndex == null ? hri : heatRiskIndex;
+        }
+
     }
 
-    public void avgTemperatureAvg(TemperatureAverage ta, Integer i) {
-        temperatureAverage = new TemperatureAverage((Float.parseFloat(temperatureAverage.getValue())*i) + Float.parseFloat(ta.getValue())/(i+1));
+    public void addTemperatureAvg(TemperatureAverage ta) {
+        if (temperatureAverages == null) {
+            temperatureAverages = new ArrayList<>();
+        }
+        temperatureAverages.add(ta);
     }
 
     public void maxTemperatureHigh(TemperatureHigh th) {
@@ -40,6 +55,10 @@ public class RegionForecast implements AggregateForecast {
 
     public void minTemperatureLow(TemperatureLow tl) {
         temperatureLow = Float.parseFloat(temperatureLow.getValue()) < Float.parseFloat(tl.getValue()) ? temperatureLow : tl;
+    }
+
+    public TemperatureAverage getTemperatureAverage() {
+        return new TemperatureAverage(temperatureAverages.stream().reduce(0f, (subtotal, average) -> subtotal + average.getFloatValue(), Float::sum) / temperatureAverages.size());
     }
 
     @Override
@@ -51,7 +70,7 @@ public class RegionForecast implements AggregateForecast {
     public List<ForecastMetric> getMetrics() {
         return List.of(airQualityIndex == null ? new AirQualityIndex(null) : airQualityIndex,
                 temperatureHigh,
-                temperatureAverage,
+                getTemperatureAverage(),
                 temperatureLow,
                 heatRiskIndex == null ? new HeatRiskIndex(null) : heatRiskIndex);
     }
