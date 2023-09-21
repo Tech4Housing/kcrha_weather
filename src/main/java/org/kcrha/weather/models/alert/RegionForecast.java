@@ -27,7 +27,7 @@ public class RegionForecast implements AggregateForecast {
 
     public void maxAirQualityIndex(AirQualityIndex aqi) {
         if (airQualityIndex != null && aqi != null) {
-            airQualityIndex = Integer.parseInt(airQualityIndex.getValue()) > Integer.parseInt(aqi.getValue()) ? airQualityIndex : aqi;
+            airQualityIndex = airQualityIndex.getValue() > aqi.getValue() ? airQualityIndex : aqi;
         } else {
             airQualityIndex = airQualityIndex == null ? aqi : airQualityIndex;
         }
@@ -35,7 +35,7 @@ public class RegionForecast implements AggregateForecast {
 
     public void maxHeatRiskIndex(HeatRiskIndex hri) {
         if (airQualityIndex != null && hri != null) {
-            heatRiskIndex = Integer.parseInt(heatRiskIndex.getValue()) > Integer.parseInt(hri.getValue()) ? heatRiskIndex : hri;
+            heatRiskIndex = heatRiskIndex.getValue() > hri.getValue() ? heatRiskIndex : hri;
         } else {
             heatRiskIndex = heatRiskIndex == null ? hri : heatRiskIndex;
         }
@@ -50,15 +50,15 @@ public class RegionForecast implements AggregateForecast {
     }
 
     public void maxTemperatureHigh(TemperatureHigh th) {
-        temperatureHigh = Float.parseFloat(temperatureHigh.getValue()) > Float.parseFloat(th.getValue()) ? temperatureHigh : th;
+        temperatureHigh = temperatureHigh.getValue() > th.getValue() ? temperatureHigh : th;
     }
 
     public void minTemperatureLow(TemperatureLow tl) {
-        temperatureLow = Float.parseFloat(temperatureLow.getValue()) < Float.parseFloat(tl.getValue()) ? temperatureLow : tl;
+        temperatureLow = temperatureLow.getValue() < tl.getValue() ? temperatureLow : tl;
     }
 
     public TemperatureAverage getTemperatureAverage() {
-        return new TemperatureAverage(temperatureAverages.stream().reduce(0f, (subtotal, average) -> subtotal + average.getFloatValue(), Float::sum) / temperatureAverages.size());
+        return new TemperatureAverage(temperatureAverages.stream().reduce(0, (subtotal, average) -> subtotal + average.getValue(), Integer::sum) / temperatureAverages.size());
     }
 
     @Override

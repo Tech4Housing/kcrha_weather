@@ -3,6 +3,7 @@ package org.kcrha.weather;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.EnumUtils;
 import org.kcrha.weather.models.cli.TaskType;
+import org.kcrha.weather.models.rules.parser.RulesFileReader;
 import org.kcrha.weather.notifications.ConsoleNotification;
 import org.kcrha.weather.notifications.HtmlForecastNotificationFormatter;
 
@@ -12,6 +13,8 @@ public class WeatherApplication {
 
 
     public static void main(String[] args) {
+        System.out.print(RulesFileReader.getRules());
+        System.exit(0);
 
         CommandLineParser parser = new DefaultParser();
         try {

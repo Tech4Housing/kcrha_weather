@@ -7,5 +7,5 @@ public interface ForecastMetric {
 
     String getLongName();
 
-    String getValue();
+    Integer getValue();
 }

@@ -4,15 +4,9 @@ import lombok.Getter;
 
 @Getter
 abstract public class TemperatureBase implements ForecastMetric {
-    public Float value;
+    public Integer value;
 
-    public TemperatureBase(Float f) {
-        value = f;
+    public TemperatureBase(Integer i) {
+        value = i;
     }
-
-    @Override
-    public String getValue() {
-        return String.valueOf(Math.round(value));
-    }
-    public Float getFloatValue() {return value;}
 }

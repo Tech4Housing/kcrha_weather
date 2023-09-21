@@ -23,13 +23,4 @@ public class HeatRiskIndex implements ForecastMetric {
     public HeatRiskIndex(Integer i) {
         value = i;
     }
-
-    @Override
-    public String getValue() {
-        if (value == null) {
-            return "N/A";
-        } else {
-            return String.valueOf(value);
-        }
-    }
 }

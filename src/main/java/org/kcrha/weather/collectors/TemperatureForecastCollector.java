@@ -62,9 +62,9 @@ public class TemperatureForecastCollector extends BaseForecastCollector<DailyTem
             final List<Integer> temperatures = entry.getValue();
             return DailyTemperatureForecast.builder()
                     .day(entry.getKey())
-                    .temperatureHigh(new TemperatureHigh(Float.valueOf(Collections.max(temperatures))))
-                    .temperatureAverage(new TemperatureAverage((float) temperatures.stream().reduce(0, Integer::sum) / temperatures.size()))
-                    .temperatureLow(new TemperatureLow(Float.valueOf(Collections.min(temperatures)))).build();
+                    .temperatureHigh(new TemperatureHigh(Collections.max(temperatures)))
+                    .temperatureAverage(new TemperatureAverage(Math.round(temperatures.stream().reduce(0, Integer::sum) / temperatures.size())))
+                    .temperatureLow(new TemperatureLow(Collections.min(temperatures))).build();
         }).collect(Collectors.toList());
     }
 }
