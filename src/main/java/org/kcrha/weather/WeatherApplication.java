@@ -13,9 +13,6 @@ public class WeatherApplication {
 
 
     public static void main(String[] args) {
-        System.out.print(RulesFileReader.getRules());
-        System.exit(0);
-
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine line = parser.parse(OPTIONS, args);
