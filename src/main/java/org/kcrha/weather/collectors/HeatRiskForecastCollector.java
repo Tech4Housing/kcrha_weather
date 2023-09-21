@@ -3,6 +3,7 @@ package org.kcrha.weather.collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import lombok.AllArgsConstructor;
 import org.kcrha.weather.collectors.api.nws.HeatRisk;
 import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
 import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
@@ -10,7 +11,6 @@ import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@AllArgsConstructor
 public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRiskForecast> {
+    private HttpService client;
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Override
     public List<DailyHeatRiskForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         try {
-            HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
-
             LocalDateTime now = LocalDateTime.now();
             String dates = IntStream.range(0, days - 1).boxed().map(i -> dtf.format(now.plusDays(i))).collect(Collectors.joining("%2C"));
 
@@ -44,7 +44,7 @@ public class HeatRiskForecastCollector implements ForecastCollector<DailyHeatRis
                     .timeout(Duration.ofSeconds(10))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.getResponse(request);
             Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
 
             return handleResponse(List.of(gson.fromJson(response.body(), HeatRisk[].class)));

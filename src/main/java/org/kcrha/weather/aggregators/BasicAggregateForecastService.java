@@ -2,12 +2,11 @@ package org.kcrha.weather.aggregators;
 
 import org.kcrha.weather.collectors.AirQualityForecastCollector;
 import org.kcrha.weather.collectors.HeatRiskForecastCollector;
+import org.kcrha.weather.collectors.HttpService;
 import org.kcrha.weather.collectors.TemperatureForecastCollector;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
-import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
 import org.kcrha.weather.models.forecast.DailyTemperatureForecast;
-import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
 import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.time.LocalDate;
@@ -24,10 +23,10 @@ public class BasicAggregateForecastService implements AggregateService<BasicAggr
     HeatRiskForecastCollector heatRiskForecastCollector;
     TemperatureForecastCollector temperatureForecastCollector;
 
-    public BasicAggregateForecastService() {
-        airQualityForecastCollector = new AirQualityForecastCollector();
-        heatRiskForecastCollector = new HeatRiskForecastCollector();
-        temperatureForecastCollector = new TemperatureForecastCollector();
+    public BasicAggregateForecastService(HttpService httpService) {
+        airQualityForecastCollector = new AirQualityForecastCollector(httpService);
+        heatRiskForecastCollector = new HeatRiskForecastCollector(httpService);
+        temperatureForecastCollector = new TemperatureForecastCollector(httpService);
     }
 
     public List<BasicAggregateForecast> getForecasts(Integer days, Float latitude, Float longitude) {

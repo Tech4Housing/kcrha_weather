@@ -2,6 +2,7 @@ package org.kcrha.weather;
 
 import org.apache.commons.cli.Options;
 import org.kcrha.weather.aggregators.BasicAggregateForecastService;
+import org.kcrha.weather.collectors.HttpService;
 import org.kcrha.weather.models.cli.Location;
 import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
@@ -14,13 +15,16 @@ import java.util.List;
 public class ForecastService implements CommandLineService {
     private final Notification notification;
     private final NotificationFormatter formatter;
+    private final HttpService httpService;
 
     public ForecastService(Notification notification) {
-        this(notification, null);
+        this(notification, null, null);
     }
-    public ForecastService(Notification notification, NotificationFormatter formatter) {
+
+    public ForecastService(Notification notification, NotificationFormatter formatter, HttpService httpService) {
         this.notification = notification;
         this.formatter = formatter != null ? formatter : new HtmlForecastNotificationFormatter();
+        this.httpService = httpService != null ? httpService : new HttpService();
     }
 
     public void run(Options options) {
@@ -28,7 +32,7 @@ public class ForecastService implements CommandLineService {
         StringBuilder output = new StringBuilder(formatter.formatHeader());
 
         for (Region region : regions) {
-            BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService();
+            BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService(httpService);
 
             for (Location location : region.locations()) {
 

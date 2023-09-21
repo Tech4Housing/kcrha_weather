@@ -1,7 +1,5 @@
 package org.kcrha.weather.models.rules;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
 

@@ -20,11 +20,11 @@ public class TieredWindowedConditions {
         for (Map.Entry<Integer, WindowedConditions> entry : windowedConditions.entrySet()) {
             Integer tier = entry.getKey();
 
-             entry.getValue()
-                     .getMatchingDatesForForecasts(forecasts)
-                     .forEach(
-                             date -> activatedTiersForDate.put(date, tier > activatedTiersForDate.get(date) ? tier : activatedTiersForDate.get(date))
-                     );
+            entry.getValue()
+                    .getMatchingDatesForForecasts(forecasts)
+                    .forEach(
+                            date -> activatedTiersForDate.put(date, tier > activatedTiersForDate.get(date) ? tier : activatedTiersForDate.get(date))
+                    );
         }
 
         return activatedTiersForDate;

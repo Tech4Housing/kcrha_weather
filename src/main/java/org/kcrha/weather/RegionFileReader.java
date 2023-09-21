@@ -7,6 +7,7 @@ import java.util.List;
 
 public class RegionFileReader extends BaseFileReader {
     public static final String REGIONS_RESOURCE_FILE_PATH = "regions.json";
+
     public static List<Region> getRegions() {
 
         String regionsJson = RegionFileReader.readFile(REGIONS_RESOURCE_FILE_PATH);

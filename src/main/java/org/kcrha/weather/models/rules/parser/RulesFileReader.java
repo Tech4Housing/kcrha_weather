@@ -3,7 +3,6 @@ package org.kcrha.weather.models.rules.parser;
 import com.google.gson.Gson;
 import org.kcrha.weather.BaseFileReader;
 import org.kcrha.weather.models.forecast.AggregateForecast;
-import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
 import org.kcrha.weather.models.rules.*;
 
 import java.time.LocalDate;
@@ -21,9 +20,9 @@ public class RulesFileReader extends BaseFileReader {
         List<AlertRuleSet> alertRuleSets = List.of(gson.fromJson(alertRulesJson, AlertRuleSet[].class));
         List<RuleSet> ruleSets = new ArrayList<>();
 
-        for(AlertRuleSet ruleSet : alertRuleSets) {
+        for (AlertRuleSet ruleSet : alertRuleSets) {
 
-            Map<Integer, WindowedConditions> windowedConditionsMap = new HashMap<>() ;
+            Map<Integer, WindowedConditions> windowedConditionsMap = new HashMap<>();
 
             for (Rule rule : ruleSet.rules()) {
                 Conditions conditions = new Conditions(rule.conditions().stream().map(condition -> new AbstractMap.SimpleEntry<>(condition.metric(), new Condition(condition.comparison(), condition.value()))).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));

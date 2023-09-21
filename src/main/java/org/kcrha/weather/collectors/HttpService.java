@@ -1,7 +1,5 @@
 package org.kcrha.weather.collectors;
 
-import org.kcrha.weather.models.forecast.DailyForecast;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,12 +8,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-abstract public class BaseForecastCollector<T extends DailyForecast> implements ForecastCollector<T> {
-
+public class HttpService {
     protected HttpResponse<String> getRetryableResponse(String url, Integer maxAttempts) throws URISyntaxException, IOException, InterruptedException {
         int attemptCount = 0;
         while (attemptCount < maxAttempts) {
-            HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
+            HttpClient client = getClient();
 
             HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().timeout(Duration.ofSeconds(10)).build();
 
@@ -28,5 +25,14 @@ abstract public class BaseForecastCollector<T extends DailyForecast> implements 
         }
 
         throw new RuntimeException(String.format("Failed to retrieve API response for %s after %s attempts", url, maxAttempts));
+    }
+
+    protected HttpResponse<String> getResponse(HttpRequest request) throws URISyntaxException, IOException, InterruptedException {
+        HttpClient client = getClient();
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    private HttpClient getClient() {
+        return HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).followRedirects(HttpClient.Redirect.NORMAL).build();
     }
 }

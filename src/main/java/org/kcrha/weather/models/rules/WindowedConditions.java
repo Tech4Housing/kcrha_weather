@@ -4,7 +4,10 @@ import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public record WindowedConditions(int window, MultiConditionMatchType type, Conditions conditions) {

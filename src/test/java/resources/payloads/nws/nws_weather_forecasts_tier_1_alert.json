@@ -1,0 +1,243 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld",
+    {
+      "@version": "1.1",
+      "wx": "https://api.weather.gov/ontology#",
+      "geo": "http://www.opengis.net/ont/geosparql#",
+      "unit": "http://codes.wmo.int/common/unit/",
+      "@vocab": "https://api.weather.gov/ontology#"
+    }
+  ],
+  "type": "Feature",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -122.2232071,
+          47.760008300000003
+        ],
+        [
+          -122.2169978,
+          47.739494499999999
+        ],
+        [
+          -122.1865282,
+          47.743661799999998
+        ],
+        [
+          -122.1927309,
+          47.764175699999996
+        ],
+        [
+          -122.2232071,
+          47.760008300000003
+        ]
+      ]
+    ]
+  },
+  "properties": {
+    "updated": "2023-09-21T04:40:19+00:00",
+    "units": "us",
+    "forecastGenerator": "HourlyForecastGenerator",
+    "generatedAt": "2023-09-21T05:46:06+00:00",
+    "updateTime": "2023-09-21T04:40:19+00:00",
+    "validTimes": "2023-09-20T22:00:00+00:00/P7DT6H",
+    "elevation": {
+      "unitCode": "wmoUnit:m",
+      "value": 60.960000000000001
+    },
+    "periods": [
+      {
+        "number": 3,
+        "name": "",
+        "startTime": "2023-09-21T00:00:00-07:00",
+        "endTime": "2023-09-21T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 1
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 8.3333333333333339
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 87
+        },
+        "windSpeed": "2 mph",
+        "windDirection": "E",
+        "icon": "https://api.weather.gov/icons/land/night/skc,1?size=small",
+        "shortForecast": "Clear",
+        "detailedForecast": ""
+      },
+      {
+        "number": 27,
+        "name": "",
+        "startTime": "2023-09-22T00:00:00-07:00",
+        "endTime": "2023-09-22T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 0
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 7.7777777777777777
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 76
+        },
+        "windSpeed": "2 mph",
+        "windDirection": "N",
+        "icon": "https://api.weather.gov/icons/land/night/skc,0?size=small",
+        "shortForecast": "Clear",
+        "detailedForecast": ""
+      },
+      {
+        "number": 51,
+        "name": "",
+        "startTime": "2023-09-23T00:00:00-07:00",
+        "endTime": "2023-09-23T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 15
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 9.4444444444444446
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 74
+        },
+        "windSpeed": "3 mph",
+        "windDirection": "SSE",
+        "icon": "https://api.weather.gov/icons/land/night/rain,15?size=small",
+        "shortForecast": "Slight Chance Light Rain",
+        "detailedForecast": ""
+      },
+      {
+        "number": 75,
+        "name": "",
+        "startTime": "2023-09-24T00:00:00-07:00",
+        "endTime": "2023-09-24T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 63
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 11.111111111111111
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 85
+        },
+        "windSpeed": "6 mph",
+        "windDirection": "SSE",
+        "icon": "https://api.weather.gov/icons/land/night/rain,63?size=small",
+        "shortForecast": "Light Rain Likely",
+        "detailedForecast": ""
+      },
+      {
+        "number": 99,
+        "name": "",
+        "startTime": "2023-09-25T00:00:00-07:00",
+        "endTime": "2023-09-25T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 69
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 11.111111111111111
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 81
+        },
+        "windSpeed": "9 mph",
+        "windDirection": "SE",
+        "icon": "https://api.weather.gov/icons/land/night/rain,69?size=small",
+        "shortForecast": "Light Rain Likely",
+        "detailedForecast": ""
+      },
+      {
+        "number": 123,
+        "name": "",
+        "startTime": "2023-09-26T00:00:00-07:00",
+        "endTime": "2023-09-26T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 86
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 11.111111111111111
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 86
+        },
+        "windSpeed": "12 mph",
+        "windDirection": "S",
+        "icon": "https://api.weather.gov/icons/land/night/rain,86?size=small",
+        "shortForecast": "Light Rain",
+        "detailedForecast": ""
+      },
+      {
+        "number": 147,
+        "name": "",
+        "startTime": "2023-09-27T00:00:00-07:00",
+        "endTime": "2023-09-27T01:00:00-07:00",
+        "isDaytime": false,
+        "temperature": 45,
+        "temperatureUnit": "F",
+        "temperatureTrend": null,
+        "probabilityOfPrecipitation": {
+          "unitCode": "wmoUnit:percent",
+          "value": 81
+        },
+        "dewpoint": {
+          "unitCode": "wmoUnit:degC",
+          "value": 10.555555555555555
+        },
+        "relativeHumidity": {
+          "unitCode": "wmoUnit:percent",
+          "value": 85
+        },
+        "windSpeed": "9 mph",
+        "windDirection": "SSE",
+        "icon": "https://api.weather.gov/icons/land/night/rain,81?size=small",
+        "shortForecast": "Light Rain",
+        "detailedForecast": ""
+      }
+    ]
+  }
+}

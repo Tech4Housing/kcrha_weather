@@ -3,6 +3,7 @@ package org.kcrha.weather.collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import lombok.AllArgsConstructor;
 import org.kcrha.weather.collectors.api.nws.ForecastPeriod;
 import org.kcrha.weather.collectors.api.nws.ForecastResponse;
 import org.kcrha.weather.collectors.api.nws.GridResponse;
@@ -20,7 +21,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TemperatureForecastCollector extends BaseForecastCollector<DailyTemperatureForecast> implements ForecastCollector<DailyTemperatureForecast> {
+@AllArgsConstructor
+public class TemperatureForecastCollector implements ForecastCollector<DailyTemperatureForecast> {
+    private HttpService client;
+
     @Override
     public List<DailyTemperatureForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         try {
@@ -33,7 +37,7 @@ public class TemperatureForecastCollector extends BaseForecastCollector<DailyTem
     }
 
     private GridResponse getGridPoints(Float latitude, Float longitude) throws URISyntaxException, IOException, InterruptedException {
-        HttpResponse<String> response = getRetryableResponse(String.format("https://api.weather.gov/points/%s,%s", latitude, longitude), 10);
+        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/points/%s,%s", latitude, longitude), 10);
 
         Gson gson = new Gson();
 
@@ -41,7 +45,7 @@ public class TemperatureForecastCollector extends BaseForecastCollector<DailyTem
     }
 
     private ForecastResponse getForecast(GridResponseProperties grid) throws URISyntaxException, IOException, InterruptedException {
-        HttpResponse<String> response = getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", grid.gridId(), grid.gridX(), grid.gridY()), 10);
+        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", grid.gridId(), grid.gridX(), grid.gridY()), 10);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME)).create();
 
