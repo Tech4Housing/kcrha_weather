@@ -50,5 +50,71 @@
                 ]
             }
         ]
+    },
+    {
+        "alertName": "heatRisk",
+        "type": "tieredWindowedConditions",
+        "rules": [
+            {
+                "tier": 0,
+                "type": "any",
+                "window": 1,
+                "conditions": [
+                    {
+                        "metric": "HEAT_RISK_INDEX",
+                        "comparison": "equalTo",
+                        "value": 0
+                    }
+                ]
+            },
+            {
+                "tier": 1,
+                "type": "any",
+                "window": 1,
+                "conditions": [
+                    {
+                        "metric": "HEAT_RISK_INDEX",
+                        "comparison": "equalTo",
+                        "value": 1
+                    }
+                ]
+            },
+            {
+                "tier": 2,
+                "type": "any",
+                "window": 1,
+                "conditions": [
+                    {
+                        "metric": "HEAT_RISK_INDEX",
+                        "comparison": "equalTo",
+                        "value": 2
+                    }
+                ]
+            },
+            {
+                "tier": 3,
+                "type": "any",
+                "window": 1,
+                "conditions": [
+                    {
+                        "metric": "HEAT_RISK_INDEX",
+                        "comparison": "equalTo",
+                        "value": 3
+                    }
+                ]
+            },
+            {
+                "tier": 4,
+                "type": "any",
+                "window": 1,
+                "conditions": [
+                    {
+                        "metric": "HEAT_RISK_INDEX",
+                        "comparison": "equalTo",
+                        "value": 4
+                    }
+                ]
+            }
+        ]
     }
 ]

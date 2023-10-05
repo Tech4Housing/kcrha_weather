@@ -19,8 +19,11 @@ public class HeatRiskIndex implements ForecastMetric {
             4, "Magenta"
     );
 
-
     public HeatRiskIndex(Integer i) {
         value = i;
+    }
+
+    public String getFormattedValue() {
+        return String.format("%s (%s)", value, INDEX_COLORS.getOrDefault(value, "UNKNOWN"));
     }
 }

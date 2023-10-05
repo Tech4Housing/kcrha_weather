@@ -38,3 +38,7 @@ out/
 
 ### MacOS ###
 **/.DS_Store
+
+### Secrets ###
+src/main/resources/secrets.properties
+

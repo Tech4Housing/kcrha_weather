@@ -52,10 +52,6 @@ public class HtmlForecastNotificationFormatter implements NotificationFormatter 
                 String tableData = "<td>";
                 if (metrics.get(orderedMetric.getType()) == null) {
                     tableData += "N/A</td>";
-                } else if (metrics.get(orderedMetric.getType()) != null
-                        && orderedMetric.getType().equals(ForecastMetricType.HEAT_RISK_INDEX)
-                        && metrics.get(orderedMetric.getType()) instanceof HeatRiskIndex) {
-                    return formatHeatRiskIndex((HeatRiskIndex) metrics.get(orderedMetric.getType()));
                 } else {
                     tableData += metrics.get(orderedMetric.getType()).getValue();
                     tableData += "</td>";
@@ -77,16 +73,5 @@ public class HtmlForecastNotificationFormatter implements NotificationFormatter 
     @Override
     public String formatFooter() {
         return "</body></html>";
-    }
-
-    private String formatHeatRiskIndex(HeatRiskIndex index) {
-        if (index == null || index.value == null) {
-            return "<td>N/A</td>";
-        }
-        if (HeatRiskIndex.INDEX_COLORS.containsKey(index.value)) {
-            return String.format("<td class=\"heatRisk-%s\">%s (%s)</td>", HeatRiskIndex.INDEX_COLORS.get(index.value), index.value, HeatRiskIndex.INDEX_COLORS.get(index.value));
-        } else {
-            return String.format("<td>N/A (Unexpected Value: %s)</td>", index.value);
-        }
     }
 }

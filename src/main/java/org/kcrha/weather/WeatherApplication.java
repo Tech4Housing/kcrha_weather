@@ -17,14 +17,14 @@ public class WeatherApplication {
             if (line.getArgList().isEmpty()) {
                 presentHelp();
             } else {
-                run(line);
+                run(line, args);
             }
         } catch (ParseException exp) {
             System.err.println("Parsing command line options failed.  Reason: " + exp.getMessage());
         }
     }
 
-    private static void run(CommandLine line) {
+    private static void run(CommandLine line, String[] args) {
 
         if (line.getArgList().size() != 1) {
             System.out.println("weather requires exactly 1 task argument!");
@@ -48,17 +48,23 @@ public class WeatherApplication {
             return;
         }
 
+        CommandLineParser parser = new DefaultParser();
+        CommandLine taskCommand = null;
+        try {
+            taskCommand = parser.parse(OPTIONS, args);
+        } catch (ParseException exp) {
+            System.err.println("Parsing command line options failed.  Reason: " + exp.getMessage());
+        }
+
         switch (task) {
             case ALERTS -> {
                 ConsoleNotification notification = new ConsoleNotification();
-                new AlertService(notification).run(OPTIONS);
+                new AlertService(notification).run(taskCommand);
             }
             case FORECASTS -> {
                 ConsoleNotification notification = new ConsoleNotification();
-                new ForecastService(notification).run(OPTIONS);
+                new ForecastService(notification).run(taskCommand);
             }
-            case REFRESH -> new RefreshService().run(OPTIONS);
-            case SETUP -> new SetupService().run(OPTIONS);
             default -> throw new RuntimeException(String.format("Unknown TaskType: %s", task));
         }
     }

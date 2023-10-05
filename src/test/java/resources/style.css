@@ -20,19 +20,19 @@ tr:nth-child(odd) {
     background-color: #e2e2e2;
 }
 
-tr.noAlert {
+td.noAlert {
   color: green;
 }
 
-tr.coldWeather-1 {
+td.coldWeather-1 {
   color: yellow;
 }
 
-tr.coldWeather-2 {
+td.coldWeather-2 {
   color: orange;
 }
 
-tr.coldWeather-3 {
+td.coldWeather-3 {
   color: red;
 }
 
@@ -46,18 +46,18 @@ tr.coldWeather-3 {
     font-weight: italics;
 }
 
-.heatRisk-Green {
+.heatRisk-0 {
     background-color: #E3F8E1;
 }
-.heatRisk-Yellow {
+.heatRisk-1 {
     background-color: #F2F346;
 }
-.heatRisk-Orange {
+.heatRisk-2 {
     background-color: #F28427;
 }
-.heatRisk-Red {
+.heatRisk-3 {
     background-color: #D81827;
 }
-.heatRisk-Magenta {
+.heatRisk-4 {
     background-color: #66006C;
 }

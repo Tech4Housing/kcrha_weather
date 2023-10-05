@@ -1,5 +1,6 @@
 package org.kcrha.weather;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.kcrha.weather.aggregators.BasicAggregateForecastService;
 import org.kcrha.weather.collectors.HttpService;
@@ -33,7 +34,7 @@ public class AlertService implements CommandLineService {
         this.httpService = httpService != null ? httpService : new HttpService();
     }
 
-    public void run(Options options) {
+    public void run(CommandLine taskCommand) {
         List<Region> regions = RegionFileReader.getRegions();
         StringBuilder output = new StringBuilder(formatter.formatHeader());
         BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService(httpService);
