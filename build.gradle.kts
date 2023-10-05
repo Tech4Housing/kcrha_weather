@@ -25,11 +25,11 @@ repositories {
 }
 
 dependencies {
+	implementation("com.google.code.gson:gson:2.10.1")
 	implementation("commons-cli:commons-cli:1.4")
 	implementation("commons-io:commons-io:2.13.0")
-	implementation("org.apache.commons:commons-email:1.5")
 	implementation("org.apache.commons:commons-text:1.10.0")
-	implementation("com.google.code.gson:gson:2.10.1")
+	implementation("org.simplejavamail:simple-java-mail:8.2.0")
 	compileOnly("org.projectlombok:lombok:1.18.24")
 	annotationProcessor("org.projectlombok:lombok:1.18.24")
 	testImplementation(platform("org.junit:junit-bom:5.10.0"))

@@ -6,4 +6,4 @@ then
     args="default"
 fi
 
-./gradlew bootRun --args="$args"
+./gradlew run --args="$args"
