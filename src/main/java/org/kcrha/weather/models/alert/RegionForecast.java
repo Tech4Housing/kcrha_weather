@@ -34,7 +34,7 @@ public class RegionForecast implements AggregateForecast {
     }
 
     public void maxHeatRiskIndex(HeatRiskIndex hri) {
-        if (airQualityIndex != null && hri != null) {
+        if (heatRiskIndex != null && hri != null) {
             heatRiskIndex = heatRiskIndex.getValue() > hri.getValue() ? heatRiskIndex : hri;
         } else {
             heatRiskIndex = heatRiskIndex == null ? hri : heatRiskIndex;
