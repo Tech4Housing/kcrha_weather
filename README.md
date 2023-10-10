@@ -47,6 +47,21 @@ The properties that must be set are as follows:
 | `MAIL_FROM_NAME_PROPERTY`   | Mail server "from" name                            | See admin                                                               |
 | `MAIL_FROM_EMAIL_PROPERTY`  | Mail server "from" email                           | See admin                                                               |
 
+Here's an example of what your `secret.properties` might look:
+
+```
+AIRNOW_API_KEY=ABCDEF12-3456-7890-ABCD-0123456789AB
+
+MAIL_HOST_SERVER=smtp.gmail.com
+MAIL_HOST_PORT=587
+MAIL_HOST_USER=example@gmail.com
+MAIL_HOST_PASS=thisIsntARealPassword
+MAIL_TO_NAME=Escalation Team
+MAIL_TO_EMAIL=EscalationTeam@agency.com
+MAIL_FROM_NAME=Automated Weather Alerts
+MAIL_FROM_EMAIL=noreply@agency.com
+```
+
 ## Usage
 
 ```console

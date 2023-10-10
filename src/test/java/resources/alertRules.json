@@ -1,120 +1,120 @@
 [
-    {
-        "alertName": "coldWeather",
-        "type": "tieredWindowedConditions",
-        "rules": [
-            {
-                "tier": 1,
-                "type": "any",
-                "window": 3,
-                "conditions": [
-                    {
-                        "metric": "TEMPERATURE_HIGH",
-                        "comparison": "lessThanOrEqualTo",
-                        "value": 45
-                    }
-                ]
-            },
-            {
-                "tier": 2,
-                "type": "any",
-                "window": 3,
-                "conditions": [
-                    {
-                        "metric": "TEMPERATURE_HIGH",
-                        "comparison": "lessThanOrEqualTo",
-                        "value": 40
-                    },
-                    {
-                        "metric": "TEMPERATURE_LOW",
-                        "comparison": "lessThanOrEqualTo",
-                        "value": 35
-                    }
-                ]
-            },
-            {
-                "tier": 3,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "TEMPERATURE_HIGH",
-                        "comparison": "lessThanOrEqualTo",
-                        "value": 35
-                    },
-                    {
-                        "metric": "TEMPERATURE_LOW",
-                        "comparison": "lessThanOrEqualTo",
-                        "value": 30
-                    }
-                ]
-            }
+  {
+    "alertName": "coldWeather",
+    "type": "tieredWindowedConditions",
+    "rules": [
+      {
+        "tier": 1,
+        "type": "any",
+        "window": 3,
+        "conditions": [
+          {
+            "metric": "TEMPERATURE_HIGH",
+            "comparison": "lessThanOrEqualTo",
+            "value": 45
+          }
         ]
-    },
-    {
-        "alertName": "heatRisk",
-        "type": "tieredWindowedConditions",
-        "rules": [
-            {
-                "tier": 0,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "HEAT_RISK_INDEX",
-                        "comparison": "equalTo",
-                        "value": 0
-                    }
-                ]
-            },
-            {
-                "tier": 1,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "HEAT_RISK_INDEX",
-                        "comparison": "equalTo",
-                        "value": 1
-                    }
-                ]
-            },
-            {
-                "tier": 2,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "HEAT_RISK_INDEX",
-                        "comparison": "equalTo",
-                        "value": 2
-                    }
-                ]
-            },
-            {
-                "tier": 3,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "HEAT_RISK_INDEX",
-                        "comparison": "equalTo",
-                        "value": 3
-                    }
-                ]
-            },
-            {
-                "tier": 4,
-                "type": "any",
-                "window": 1,
-                "conditions": [
-                    {
-                        "metric": "HEAT_RISK_INDEX",
-                        "comparison": "equalTo",
-                        "value": 4
-                    }
-                ]
-            }
+      },
+      {
+        "tier": 2,
+        "type": "any",
+        "window": 3,
+        "conditions": [
+          {
+            "metric": "TEMPERATURE_HIGH",
+            "comparison": "lessThanOrEqualTo",
+            "value": 40
+          },
+          {
+            "metric": "TEMPERATURE_LOW",
+            "comparison": "lessThanOrEqualTo",
+            "value": 35
+          }
         ]
-    }
+      },
+      {
+        "tier": 3,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "TEMPERATURE_HIGH",
+            "comparison": "lessThanOrEqualTo",
+            "value": 35
+          },
+          {
+            "metric": "TEMPERATURE_LOW",
+            "comparison": "lessThanOrEqualTo",
+            "value": 30
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "alertName": "heatRisk",
+    "type": "tieredWindowedConditions",
+    "rules": [
+      {
+        "tier": 0,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "HEAT_RISK_INDEX",
+            "comparison": "equalTo",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "tier": 1,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "HEAT_RISK_INDEX",
+            "comparison": "equalTo",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "tier": 2,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "HEAT_RISK_INDEX",
+            "comparison": "equalTo",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "tier": 3,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "HEAT_RISK_INDEX",
+            "comparison": "equalTo",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "tier": 4,
+        "type": "any",
+        "window": 1,
+        "conditions": [
+          {
+            "metric": "HEAT_RISK_INDEX",
+            "comparison": "equalTo",
+            "value": 4
+          }
+        ]
+      }
+    ]
+  }
 ]

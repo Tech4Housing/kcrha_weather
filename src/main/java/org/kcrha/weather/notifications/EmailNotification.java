@@ -1,15 +1,16 @@
 package org.kcrha.weather.notifications;
 
 import lombok.Getter;
-import org.kcrha.weather.models.cli.PropertyReader;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.mailer.Mailer;
+import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Properties;
+
+import static org.kcrha.weather.models.cli.PropertyReader.getSecretProperty;
 
 @Getter
 public class EmailNotification implements Notification {
@@ -29,6 +30,7 @@ public class EmailNotification implements Notification {
             sendEmail(message);
         } catch (RuntimeException e) {
             System.out.println("Failed to send email alert!");
+            System.out.println(e);
             return false;
         }
         return true;
@@ -43,11 +45,9 @@ public class EmailNotification implements Notification {
 
     private Email prepareEmail(String htmlMessage) {
         try {
-            Properties secretProperties = PropertyReader.getSecretProperties();
-
             return EmailBuilder.startingBlank()
-                    .to((String) secretProperties.get(MAIL_TO_NAME_PROPERTY), (String) secretProperties.get(MAIL_TO_EMAIL_PROPERTY))
-                    .from((String) secretProperties.get(MAIL_FROM_NAME_PROPERTY), (String) secretProperties.get(MAIL_FROM_EMAIL_PROPERTY))
+                    .to(getSecretProperty(MAIL_TO_NAME_PROPERTY), getSecretProperty(MAIL_TO_EMAIL_PROPERTY))
+                    .from(getSecretProperty(MAIL_FROM_NAME_PROPERTY), getSecretProperty(MAIL_FROM_EMAIL_PROPERTY))
                     .withSubject(String.format("[AUTOMATED ALERT] Weather Alert -- Date: %s", LocalDate.now()))
                     .withHTMLText(htmlMessage)
                     .buildEmail();
@@ -58,17 +58,18 @@ public class EmailNotification implements Notification {
 
     private Mailer prepareMailer() {
         try {
-            Properties secretProperties = PropertyReader.getSecretProperties();
-
             return MailerBuilder
-                .withSMTPServer(
-                        (String) secretProperties.get(MAIL_HOST_SERVER_PROPERTY),
-                        (Integer) secretProperties.get(MAIL_HOST_PORT_PROPERTY),
-                        (String) secretProperties.get(MAIL_HOST_USER_PROPERTY),
-                        (String) secretProperties.get(MAIL_HOST_PASS_PROPERTY))
-                .withSessionTimeout(10 * 1000)
-                .clearEmailValidator()
-                .buildMailer();
+                    .withSMTPServer(
+                            getSecretProperty(MAIL_HOST_SERVER_PROPERTY),
+                            Integer.valueOf(getSecretProperty(MAIL_HOST_PORT_PROPERTY)),
+                            getSecretProperty(MAIL_HOST_USER_PROPERTY),
+                            getSecretProperty(MAIL_HOST_PASS_PROPERTY)
+                    )
+                    .withTransportStrategy(TransportStrategy.SMTP_TLS)
+                    .trustingAllHosts(true)
+                    .withSessionTimeout(10 * 1000)
+                    .clearEmailValidator()
+                    .buildMailer();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

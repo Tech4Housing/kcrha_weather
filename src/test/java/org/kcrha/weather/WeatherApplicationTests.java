@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 
 class WeatherApplicationTests {
 
-	@Test
-	void contextLoads() {
-		assert true;
-	}
+    @Test
+    void contextLoads() {
+        assert true;
+    }
 
 }

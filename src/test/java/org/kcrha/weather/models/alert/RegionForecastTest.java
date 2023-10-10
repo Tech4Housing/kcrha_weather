@@ -6,8 +6,6 @@ import org.kcrha.weather.models.forecast.metrics.*;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RegionForecastTest {
 
     RegionForecast regionForecast;

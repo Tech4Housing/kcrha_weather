@@ -4,6 +4,11 @@ import org.apache.commons.cli.*;
 import org.apache.commons.lang3.EnumUtils;
 import org.kcrha.weather.models.cli.TaskType;
 import org.kcrha.weather.notifications.ConsoleNotification;
+import org.kcrha.weather.notifications.EmailNotification;
+
+import java.io.IOException;
+
+import static org.kcrha.weather.models.cli.PropertyReader.getSecretProperty;
 
 public class WeatherApplication {
 
@@ -58,7 +63,7 @@ public class WeatherApplication {
 
         switch (task) {
             case ALERTS -> {
-                ConsoleNotification notification = new ConsoleNotification();
+                EmailNotification notification = new EmailNotification();
                 new AlertService(notification).run(taskCommand);
             }
             case FORECASTS -> {
