@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,16 +29,18 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
         try {
             HttpResponse<String> response = client.getRetryableResponse(String.format("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=%s&longitude=%s&distance=25&API_KEY=%s", latitude, longitude, getApiKey()), 10);
             Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
+            List<DailyAirQualityForecast> forecast = new ArrayList<>();
+            forecast.add(handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class))));
 
-            return handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class)));
+            return forecast;
 
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DailyAirQualityForecast> handleResponse(List<Forecast> forecasts) {
-        return forecasts.stream().map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQualityIndex(forecast.AQI()))).toList();
+    private DailyAirQualityForecast handleResponse(List<Forecast> forecasts) {
+        return forecasts.stream().max(Comparator.comparing(Forecast::AQI)).map(forecast -> new DailyAirQualityForecast(forecast.DateForecast(), new AirQualityIndex(forecast.AQI()))).orElse(null);
     }
 
     private String getApiKey() {

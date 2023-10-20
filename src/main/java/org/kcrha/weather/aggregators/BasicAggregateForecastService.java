@@ -12,10 +12,7 @@ import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
 import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,13 +31,13 @@ public class BasicAggregateForecastService implements AggregateService<BasicAggr
     public List<BasicAggregateForecast> getForecasts(Integer days, Float latitude, Float longitude) {
         Map<LocalDate, DailyTemperatureForecast> temperatureForecasts = temperatureForecastCollector.retrieveDailyForecasts(days, latitude, longitude)
                 .stream().collect(Collectors.toMap(DailyTemperatureForecast::getDay, Function.identity()));
-        Map<LocalDate, DailyAirQualityForecast> airQualityForecasts = airQualityForecastCollector.retrieveDailyForecasts(days, latitude, longitude)
-                .stream().collect(Collectors.toMap(DailyAirQualityForecast::getDay, Function.identity()));
+        List<DailyAirQualityForecast> airQualityForecasts = airQualityForecastCollector.retrieveDailyForecasts(days, latitude, longitude);
+        Map<LocalDate, DailyAirQualityForecast> airQualityForecastMap = airQualityForecasts.stream().filter(Objects::nonNull).collect(Collectors.toMap(DailyAirQualityForecast::getDay, Function.identity()));
         Map<LocalDate, DailyHeatRiskForecast> heatRiskForecasts = getHeatRiskForecasts(days, latitude, longitude);
         java.util.List<BasicAggregateForecast> aggregatedForecasts = new ArrayList<>();
         for (Map.Entry<LocalDate, DailyTemperatureForecast> entry : temperatureForecasts.entrySet()) {
             DailyTemperatureForecast dailyTemperatureForecast = entry.getValue();
-            AirQualityIndex aqi = airQualityForecasts.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
+            AirQualityIndex aqi = airQualityForecastMap.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
             HeatRiskIndex hri = heatRiskForecasts.getOrDefault(entry.getKey(), DailyHeatRiskForecast.builder().build()).getHeatRiskIndex();
             aggregatedForecasts.add(BasicAggregateForecast.builder()
                     .day(dailyTemperatureForecast.getDay())
