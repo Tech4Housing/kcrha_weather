@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import lombok.AllArgsConstructor;
+import org.kcrha.weather.GridPointCacheFileReader;
 import org.kcrha.weather.collectors.api.nws.ForecastPeriod;
 import org.kcrha.weather.collectors.api.nws.ForecastResponse;
 import org.kcrha.weather.collectors.api.nws.GridResponse;
 import org.kcrha.weather.collectors.api.nws.GridResponseProperties;
+import org.kcrha.weather.models.cli.GridPoint;
 import org.kcrha.weather.models.forecast.DailyTemperatureForecast;
 import org.kcrha.weather.models.forecast.metrics.TemperatureAverage;
 import org.kcrha.weather.models.forecast.metrics.TemperatureHigh;
@@ -28,24 +30,31 @@ public class TemperatureForecastCollector implements ForecastCollector<DailyTemp
     @Override
     public List<DailyTemperatureForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         try {
-            GridResponse grid = getGridPoints(latitude, longitude);
-            ForecastResponse forecastResponse = getForecast(grid.properties());
+            GridPoint gridPoint = getGridPoints(latitude, longitude);
+            ForecastResponse forecastResponse = getForecast(gridPoint);
             return handleResponse(forecastResponse);
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private GridResponse getGridPoints(Float latitude, Float longitude) throws URISyntaxException, IOException, InterruptedException {
-        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/points/%s,%s", latitude, longitude), 10);
+    private GridPoint getGridPoints(Float latitude, Float longitude) throws URISyntaxException, IOException, InterruptedException {
+        GridPoint gridPoint = GridPointCacheFileReader.getGridPoint(latitude, longitude);
+        if (gridPoint == null) {
+            HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/points/%s,%s", latitude, longitude), 10);
 
-        Gson gson = new Gson();
+            Gson gson = new Gson();
 
-        return gson.fromJson(response.body(), GridResponse.class);
+            GridResponse gridResponse = gson.fromJson(response.body(), GridResponse.class);
+            gridPoint = new GridPoint(gridResponse.properties().gridId(), gridResponse.properties().gridX(), gridResponse.properties().gridY());
+            GridPointCacheFileReader.writeGridPoint(latitude, longitude, gridPoint);
+        }
+
+        return gridPoint;
     }
 
-    private ForecastResponse getForecast(GridResponseProperties grid) throws URISyntaxException, IOException, InterruptedException {
-        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", grid.gridId(), grid.gridX(), grid.gridY()), 10);
+    private ForecastResponse getForecast(GridPoint gridPoint) throws URISyntaxException, IOException, InterruptedException {
+        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", gridPoint.gridId(), gridPoint.x(), gridPoint.y()), 10);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME)).create();
 

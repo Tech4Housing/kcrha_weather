@@ -33,7 +33,6 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
             forecast.add(handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class))));
 
             return forecast;
-
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,8 @@
 package org.kcrha.weather.collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,10 +19,20 @@ public class HttpService {
 
             HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().timeout(Duration.ofSeconds(10)).build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                return response;
-            } else {
+            try {
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    return response;
+                } else {
+                    System.out.printf("Received non-200 response from URL: %s\n", url);
+                }
+            } catch (SSLHandshakeException e) {
+                if (StringUtils.isBlank(url)) {
+                    System.out.println("Blank URL!");
+                } else {
+                    System.out.printf("Encountered SSLHandshakeException when querying URL: %s\n", url);
+                }
+            } finally {
                 attemptCount += 1;
             }
         }
