@@ -30,12 +30,10 @@ public class ForecastService implements CommandLineService {
     public void run(CommandLine taskCommand) {
         List<Region> regions = RegionFileReader.getRegions();
         StringBuilder output = new StringBuilder(formatter.formatHeader());
+        BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService(httpService);
 
         for (Region region : regions) {
-            BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService(httpService);
-
             for (Location location : region.locations()) {
-
                 List<BasicAggregateForecast> aggregatedForecasts = forecastAggregateService.getForecasts(7, location.lat(), location.lon());
 
                 output.append(formatter.formatForecastTableHeader(String.format("%s (%s)", location.location(), region.region())));

@@ -39,30 +39,34 @@ public class AlertService implements CommandLineService {
         BasicAggregateForecastService forecastAggregateService = new BasicAggregateForecastService(httpService);
 
         for (Region region : regions) {
-            Map<LocalDate, RegionForecast> dailyForecastsForRegion = new HashMap<>();
+//            Map<LocalDate, RegionForecast> dailyForecastsForRegion = new HashMap<>();
 
             for (Location location : region.locations()) {
-                for (BasicAggregateForecast forecast : forecastAggregateService.getForecasts(7, location.lat(), location.lon())) {
-                    RegionForecast dailyRegionForecast = dailyForecastsForRegion.getOrDefault(forecast.getDate(), RegionForecast.builder()
-                            .day(forecast.getDate())
-                            .airQualityIndex(forecast.getAirQualityIndex())
-                            .temperatureHigh(forecast.getTemperatureHigh())
-                            .temperatureLow(forecast.getTemperatureLow())
-                            .heatRiskIndex(forecast.getHeatRiskIndex())
-                            .build());
-                    dailyRegionForecast.maxAirQualityIndex(forecast.getAirQualityIndex());
-                    dailyRegionForecast.maxTemperatureHigh(forecast.getTemperatureHigh());
-                    dailyRegionForecast.addTemperatureAvg(forecast.getTemperatureAverage());
-                    dailyRegionForecast.minTemperatureLow(forecast.getTemperatureLow());
-                    dailyRegionForecast.maxHeatRiskIndex(forecast.getHeatRiskIndex());
-                    dailyForecastsForRegion.put(forecast.getDate(), dailyRegionForecast);
-                }
+//                for (BasicAggregateForecast forecast : forecastAggregateService.getForecasts(7, location.lat(), location.lon())) {
+//                    RegionForecast dailyRegionForecast = dailyForecastsForRegion.getOrDefault(forecast.getDate(), RegionForecast.builder()
+//                            .day(forecast.getDate())
+//                            .airQualityIndex(forecast.getAirQualityIndex())
+//                            .temperatureHigh(forecast.getTemperatureHigh())
+//                            .temperatureLow(forecast.getTemperatureLow())
+//                            .heatRiskIndex(forecast.getHeatRiskIndex())
+//                            .build());
+//                    dailyRegionForecast.maxAirQualityIndex(forecast.getAirQualityIndex());
+//                    dailyRegionForecast.maxTemperatureHigh(forecast.getTemperatureHigh());
+//                    dailyRegionForecast.addTemperatureAvg(forecast.getTemperatureAverage());
+//                    dailyRegionForecast.minTemperatureLow(forecast.getTemperatureLow());
+//                    dailyRegionForecast.maxHeatRiskIndex(forecast.getHeatRiskIndex());
+//                    dailyForecastsForRegion.put(forecast.getDate(), dailyRegionForecast);
+//                }
+                List<BasicAggregateForecast> aggregatedForecasts = forecastAggregateService.getForecasts(7, location.lat(), location.lon());
+
+                output.append(formatter.formatForecastTableHeader(String.format("%s (%s)", location.location(), region.region())));
+                output.append(formatter.formatForecastTable(aggregatedForecasts));
             }
 
-            output.append(formatter.formatForecastTableHeader(region.region()));
-            output.append(formatter.formatForecastTable(new ArrayList<>(dailyForecastsForRegion.values())));
+//            output.append(formatter.formatForecastTableHeader(region.region()));
+//            output.append(formatter.formatForecastTable(new ArrayList<>(dailyForecastsForRegion.values())));
         }
-        output.append(formatter.formatFooter());
+//        output.append(formatter.formatFooter());
         notification.send(output.toString());
     }
 }

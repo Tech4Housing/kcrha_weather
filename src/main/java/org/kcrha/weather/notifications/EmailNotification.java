@@ -1,7 +1,9 @@
 package org.kcrha.weather.notifications;
 
+import jakarta.mail.Message;
 import lombok.Getter;
 import org.simplejavamail.api.email.Email;
+import org.simplejavamail.api.email.Recipient;
 import org.simplejavamail.api.mailer.Mailer;
 import org.simplejavamail.api.mailer.config.TransportStrategy;
 import org.simplejavamail.email.EmailBuilder;
@@ -9,6 +11,9 @@ import org.simplejavamail.mailer.MailerBuilder;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.kcrha.weather.models.cli.PropertyReader.getSecretProperty;
 
@@ -19,8 +24,7 @@ public class EmailNotification implements Notification {
     private static final String MAIL_HOST_PORT_PROPERTY = "MAIL_HOST_PORT";
     private static final String MAIL_HOST_USER_PROPERTY = "MAIL_HOST_USER";
     private static final String MAIL_HOST_PASS_PROPERTY = "MAIL_HOST_PASS";
-    private static final String MAIL_TO_NAME_PROPERTY = "MAIL_TO_NAME";
-    private static final String MAIL_TO_EMAIL_PROPERTY = "MAIL_TO_EMAIL";
+    private static final String MAIL_TO_PROPERTY = "MAIL_TO";
     private static final String MAIL_FROM_NAME_PROPERTY = "MAIL_FROM_NAME";
     private static final String MAIL_FROM_EMAIL_PROPERTY = "MAIL_FROM_EMAIL";
 
@@ -45,8 +49,14 @@ public class EmailNotification implements Notification {
 
     private Email prepareEmail(String htmlMessage) {
         try {
+            String recipientsString = getSecretProperty(MAIL_TO_PROPERTY);
+            List<String> recipientParts = Arrays.stream(recipientsString.split(";")).toList();
+            List<Recipient> recipients = recipientParts.stream().map(r -> {
+                String[] recipientPart = r.split(",");
+                return new Recipient(recipientPart[0], recipientPart[1], Message.RecipientType.TO);
+            }).toList();
             return EmailBuilder.startingBlank()
-                    .to(getSecretProperty(MAIL_TO_NAME_PROPERTY), getSecretProperty(MAIL_TO_EMAIL_PROPERTY))
+                    .withRecipients(recipients)
                     .from(getSecretProperty(MAIL_FROM_NAME_PROPERTY), getSecretProperty(MAIL_FROM_EMAIL_PROPERTY))
                     .withSubject(String.format("[AUTOMATED ALERT] Weather Alert -- Date: %s", LocalDate.now()))
                     .withHTMLText(htmlMessage)
