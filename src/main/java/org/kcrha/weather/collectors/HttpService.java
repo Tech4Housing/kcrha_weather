@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.time.Duration;
 
 public class HttpService {
@@ -17,7 +18,7 @@ public class HttpService {
         while (attemptCount < maxAttempts) {
             HttpClient client = getClient();
 
-            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().timeout(Duration.ofSeconds(10)).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(new URI(url)).GET().timeout(Duration.ofSeconds(15)).build();
 
             try {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -26,11 +27,11 @@ public class HttpService {
                 } else {
                     System.out.printf("Received non-200 response from URL: %s\n", url);
                 }
-            } catch (SSLHandshakeException e) {
+            } catch (SSLHandshakeException | HttpTimeoutException e) {
                 if (StringUtils.isBlank(url)) {
                     System.out.println("Blank URL!");
                 } else {
-                    System.out.printf("Encountered SSLHandshakeException when querying URL: %s\n", url);
+                    System.out.printf("Encountered %s when querying URL: %s\n", e, url);
                 }
             } finally {
                 attemptCount += 1;

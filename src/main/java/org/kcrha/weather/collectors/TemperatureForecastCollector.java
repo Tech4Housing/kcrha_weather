@@ -41,6 +41,7 @@ public class TemperatureForecastCollector implements ForecastCollector<DailyTemp
     private GridPoint getGridPoints(Float latitude, Float longitude) throws URISyntaxException, IOException, InterruptedException {
         GridPoint gridPoint = GridPointCacheFileReader.getGridPoint(latitude, longitude);
         if (gridPoint == null) {
+            System.out.printf("No cached grid point found for %s,%s; querying NWS\n", latitude, longitude);
             HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/points/%s,%s", latitude, longitude), 10);
 
             Gson gson = new Gson();
@@ -54,7 +55,7 @@ public class TemperatureForecastCollector implements ForecastCollector<DailyTemp
     }
 
     private ForecastResponse getForecast(GridPoint gridPoint) throws URISyntaxException, IOException, InterruptedException {
-        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", gridPoint.gridId(), gridPoint.x(), gridPoint.y()), 10);
+        HttpResponse<String> response = client.getRetryableResponse(String.format("https://api.weather.gov/gridpoints/%s/%s,%s/forecast/hourly", gridPoint.gridId(), gridPoint.x(), gridPoint.y()), 20);
 
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME)).create();
 
