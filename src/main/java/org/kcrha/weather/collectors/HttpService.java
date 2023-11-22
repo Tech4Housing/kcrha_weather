@@ -1,6 +1,7 @@
 package org.kcrha.weather.collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kcrha.weather.collectors.exceptions.MaxAttemptsExceededException;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class HttpService {
             }
         }
 
-        throw new RuntimeException(String.format("Failed to retrieve API response for %s after %s attempts", url, maxAttempts));
+        throw new MaxAttemptsExceededException(String.format("Failed to retrieve API response for %s after %s attempts", url, maxAttempts));
     }
 
     protected HttpResponse<String> getResponse(HttpRequest request) throws URISyntaxException, IOException, InterruptedException {

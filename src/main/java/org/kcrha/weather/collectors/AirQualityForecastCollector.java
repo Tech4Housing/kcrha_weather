@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import lombok.AllArgsConstructor;
 import org.kcrha.weather.collectors.api.airnow.Forecast;
+import org.kcrha.weather.collectors.exceptions.MaxAttemptsExceededException;
 import org.kcrha.weather.models.cli.PropertyReader;
 import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.metrics.AirQualityIndex;
@@ -14,6 +15,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,10 +28,16 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
     private HttpService client;
     private static final String API_KEY_PROPERTY = "AIRNOW_API_KEY";
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static boolean RATE_LIMIT_REACHED = false;
 
     @Override
     public List<DailyAirQualityForecast> retrieveDailyForecasts(Integer days, Float latitude, Float longitude) {
         List<DailyAirQualityForecast> forecast = new ArrayList<>();
+        if (RATE_LIMIT_REACHED) {
+            System.out.println("Rate limit breaker enabled, skipping.");
+            return forecast;
+        }
+
         LocalDateTime now = LocalDateTime.now();
         List<String> dates = IntStream.range(0, days - 1).boxed().map(i -> dtf.format(now.plusDays(i))).toList();
 
@@ -40,6 +48,10 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
                 forecast.add(handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class))));
             } catch (URISyntaxException | IOException | InterruptedException e) {
                 System.out.printf("Failed to collect AirQuality (Exception: %s)\n", e);
+            } catch (MaxAttemptsExceededException e) {
+                System.out.println("Max attempts exceeded. We have likely hit our rate limit.");
+                RATE_LIMIT_REACHED = true;
+                return forecast;
             }
         }
 
