@@ -1,18 +1,29 @@
-@page { size: A4 landscape;}
+@page {
+    size: A4;
+}
+
 
 table, th, td {
     border: 2px solid black;
     border-collapse: collapse;
 }
 
-th, td {
-    padding: 5px;
-}
-
 th {
     background-color: #c3c3c3;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.maxWidth {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 10%;
+}
+
+td {
+    padding: 5px;
+    font-size: 10px;
 }
 
 tr:nth-child(even) {
@@ -20,10 +31,6 @@ tr:nth-child(even) {
 }
 tr:nth-child(odd) {
     background-color: #e2e2e2;
-}
-
-td {
-  width: 6000px;
 }
 
 td.coldWeather-1 {
@@ -62,4 +69,8 @@ td.coldWeather-3 {
 }
 .heatRisk-Magenta {
     background-color: #66006C;
+}
+
+.forecastTableContainer {
+    page-break-after: auto;
 }

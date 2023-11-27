@@ -17,10 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @AllArgsConstructor
@@ -38,12 +36,45 @@ public class AirQualityForecastCollector implements ForecastCollector<DailyAirQu
             return forecast;
         }
 
+        try {
+            HttpResponse<String> response = client.getRetryableResponse(String.format("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=%s&longitude=%s&distance=25&API_KEY=%s", latitude, longitude, getApiKey()), 20);
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
+            forecast.add(handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class))));
+        } catch (URISyntaxException | IOException | InterruptedException e) {
+            System.out.printf("Failed to collect AirQuality (Exception: %s)\n", e);
+        } catch (MaxAttemptsExceededException e) {
+            System.out.println("Max attempts exceeded. We have likely hit our rate limit.");
+            RATE_LIMIT_REACHED = true;
+            return forecast;
+        }
+
         LocalDateTime now = LocalDateTime.now();
-        List<String> dates = IntStream.range(0, days - 1).boxed().map(i -> dtf.format(now.plusDays(i))).toList();
+        List<String> dates = IntStream.range(0, Math.max(days, 5) - 1).boxed().map(i -> dtf.format(now.plusDays(i))).toList();
+
+        if (forecast.stream()
+                .filter(Objects::nonNull)
+                .map(DailyAirQualityForecast::getDate)
+                .map(LocalDate::atStartOfDay)
+                .map(dtf::format)
+                .collect(Collectors.toSet())
+                .equals(new HashSet<>(dates))) {
+            System.out.println("First API call fetched all relevant dates, returning early");
+            return forecast;
+        }
 
         for (String date : dates) {
             try {
-                HttpResponse<String> response = client.getRetryableResponse(String.format("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&date=%s&latitude=%s&longitude=%s&distance=5&API_KEY=%s", date, latitude, longitude, getApiKey()), 20);
+                if (forecast.stream()
+                        .filter(Objects::nonNull)
+                        .map(DailyAirQualityForecast::getDate)
+                        .map(LocalDate::atStartOfDay)
+                        .map(dtf::format)
+                        .collect(Collectors.toSet())
+                        .contains(date)) {
+                    System.out.println("Skipping check date, as we already found it in a previous query");
+                    continue;
+                }
+                HttpResponse<String> response = client.getRetryableResponse(String.format("https://www.airnowapi.org/aq/forecast/latLong/?format=application/json&latitude=%s&longitude=%s&date=%s&distance=25&API_KEY=%s", date, latitude, longitude, getApiKey()), 20);
                 Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, type, jsonDeserializationContext) -> LocalDate.parse(json.getAsString().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))).create();
                 forecast.add(handleResponse(List.of(gson.fromJson(response.body(), Forecast[].class))));
             } catch (URISyntaxException | IOException | InterruptedException e) {

@@ -32,7 +32,7 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
     @Override
     public String formatForecastTableHeader(String tableHeader) {
-        return String.format("\n<span class=\"forecastTableHeader\">%s</span>\n", tableHeader);
+        return String.format("\n<div class=\"forecastTableContainer\">\n<span class=\"forecastTableHeader\">%s</span>\n", tableHeader);
     }
 
     public String formatForecastTable(List<? extends AggregateForecast> forecasts) {
@@ -48,8 +48,8 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
         List<ForecastMetricType> orderedMetrics = metricsSet.stream().sorted().toList();
 
-        html.append("<tr><th>Metric</th><th>");
-        html.append(dateHeaders.stream().map(LocalDate::toString).collect(Collectors.joining("</th><th>")));
+        html.append("<tr><th class=\"maxWidth\">Metric</th><th class=\"maxWidth\">");
+        html.append(dateHeaders.stream().map(LocalDate::toString).collect(Collectors.joining("</th><th class=\"maxWidth\">")));
         html.append("</th></tr>\n");
 
         for (ForecastMetricType orderedMetric : orderedMetrics) {
@@ -91,7 +91,7 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
     @Override
     public String formatForecastTableFooter(String tableFooter) {
-        return String.format("\n<span class=\"forecastTableFooter\">%s</span>\n", tableFooter);
+        return String.format("\n<span class=\"forecastTableFooter\">%s</span>\n</div>\n", tableFooter);
     }
 
     @Override
