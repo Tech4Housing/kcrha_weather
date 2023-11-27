@@ -1,3 +1,5 @@
+@page { size: A4 landscape;}
+
 table, th, td {
     border: 2px solid black;
     border-collapse: collapse;
@@ -20,20 +22,20 @@ tr:nth-child(odd) {
     background-color: #e2e2e2;
 }
 
-td.noAlert {
-  color: green;
+td {
+  width: 6000px;
 }
 
 td.coldWeather-1 {
-  color: yellow;
+  background-color: yellow;
 }
 
 td.coldWeather-2 {
-  color: orange;
+  background-color: orange;
 }
 
 td.coldWeather-3 {
-  color: red;
+  background-color: red;
 }
 
 .forecastTableHeader {
@@ -43,21 +45,21 @@ td.coldWeather-3 {
 
 .forecastTableFooter {
     font-size: 12px;
-    font-weight: italics;
+    font-style: italic;
 }
 
-.heatRisk-0 {
+.heatRisk-Green {
     background-color: #E3F8E1;
 }
-.heatRisk-1 {
+.heatRisk-Yellow {
     background-color: #F2F346;
 }
-.heatRisk-2 {
+.heatRisk-Orange {
     background-color: #F28427;
 }
-.heatRisk-3 {
+.heatRisk-Red {
     background-color: #D81827;
 }
-.heatRisk-4 {
+.heatRisk-Magenta {
     background-color: #66006C;
 }

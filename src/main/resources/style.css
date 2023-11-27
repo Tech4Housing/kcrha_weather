@@ -1,3 +1,5 @@
+@page { size: A4 landscape;}
+
 table, th, td {
     border: 2px solid black;
     border-collapse: collapse;
@@ -20,20 +22,20 @@ tr:nth-child(odd) {
     background-color: #e2e2e2;
 }
 
-tr.noAlert {
-  color: green;
+td {
+  width: 6000px;
 }
 
-tr.coldWeather-1 {
-  color: yellow;
+td.coldWeather-1 {
+  background-color: yellow;
 }
 
-tr.coldWeather-2 {
-  color: orange;
+td.coldWeather-2 {
+  background-color: orange;
 }
 
-tr.coldWeather-3 {
-  color: red;
+td.coldWeather-3 {
+  background-color: red;
 }
 
 .forecastTableHeader {
@@ -43,7 +45,7 @@ tr.coldWeather-3 {
 
 .forecastTableFooter {
     font-size: 12px;
-    font-weight: italics;
+    font-style: italic;
 }
 
 .heatRisk-Green {

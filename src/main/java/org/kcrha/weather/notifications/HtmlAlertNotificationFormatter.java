@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
     public String formatHeader() {
-        return "<html>\n" +
+        return "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
                 "<head>\n" +
+                "<title>Forecasts</title>\n" +
                 "<style>\n" +
                 EmailCssFileReader.getStyle() + "\n" +
-                "</style>\n" +
-                "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n" +
-                "</head>\n";
+                "</style></head><body>\n";
     }
 
     @Override
@@ -96,6 +96,6 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
     @Override
     public String formatFooter() {
-        return "</html>";
+        return "</body></html>";
     }
 }
