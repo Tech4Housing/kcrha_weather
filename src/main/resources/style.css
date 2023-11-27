@@ -2,6 +2,9 @@
     size: A4;
 }
 
+.forecastTableHeader, .forecastTableFooter, td, th {
+    font-family: Helvetica, sans-serif;
+}
 
 table, th, td {
     border: 2px solid black;
@@ -46,7 +49,7 @@ td.coldWeather-3 {
 }
 
 .forecastTableHeader {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -72,5 +75,5 @@ td.coldWeather-3 {
 }
 
 .forecastTableContainer {
-    page-break-after: auto;
+    page-break-after: avoid;
 }

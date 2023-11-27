@@ -91,7 +91,7 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
     @Override
     public String formatForecastTableFooter(String tableFooter) {
-        return String.format("\n<span class=\"forecastTableFooter\">%s</span>\n</div>\n", tableFooter);
+        return String.format("\n<span class=\"forecastTableFooter\">%s</span>\n</div>\n<br/>\n", tableFooter);
     }
 
     @Override
