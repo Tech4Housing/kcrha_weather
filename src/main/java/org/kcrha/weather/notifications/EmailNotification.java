@@ -1,7 +1,5 @@
 package org.kcrha.weather.notifications;
 
-import com.lowagie.text.pdf.PdfDocument;
-import com.lowagie.text.pdf.PdfWriter;
 import jakarta.activation.FileDataSource;
 import jakarta.mail.Message;
 import lombok.Getter;
@@ -16,7 +14,9 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

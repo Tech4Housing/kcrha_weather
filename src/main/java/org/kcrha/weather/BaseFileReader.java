@@ -3,12 +3,12 @@ package org.kcrha.weather;
 import org.apache.commons.io.IOUtils;
 import org.kcrha.weather.models.cli.MissingFileException;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 abstract public class BaseFileReader {
     protected static String readFile(String filePath) {

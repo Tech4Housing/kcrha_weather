@@ -3,10 +3,7 @@ package org.kcrha.weather;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.kcrha.weather.models.cli.GridPoint;
-import org.kcrha.weather.models.cli.MissingFileException;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.Map;
 
