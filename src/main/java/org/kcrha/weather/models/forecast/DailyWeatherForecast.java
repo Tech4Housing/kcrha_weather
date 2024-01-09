@@ -2,9 +2,7 @@ package org.kcrha.weather.models.forecast;
 
 
 import lombok.*;
-import org.kcrha.weather.models.forecast.metrics.TemperatureAverage;
-import org.kcrha.weather.models.forecast.metrics.TemperatureHigh;
-import org.kcrha.weather.models.forecast.metrics.TemperatureLow;
+import org.kcrha.weather.models.forecast.metrics.*;
 
 import java.time.LocalDate;
 
@@ -13,11 +11,14 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyTemperatureForecast implements DailyForecast {
+public class DailyWeatherForecast implements DailyForecast {
     public LocalDate day;
     public TemperatureHigh temperatureHigh;
     public TemperatureAverage temperatureAverage;
     public TemperatureLow temperatureLow;
+    public RainfallAccumulation rainfallAccumulation;
+    public SnowIceAccumulation snowIceAccumulation;
+
 
     @Override
     public LocalDate getDate() {

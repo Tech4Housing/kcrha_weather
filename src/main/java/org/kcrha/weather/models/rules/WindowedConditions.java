@@ -34,7 +34,7 @@ public record WindowedConditions(int window, MultiConditionMatchType type, Condi
         return matchingDates;
     }
 
-    private boolean checkConditions(List<ForecastMetric> metrics) {
+    private boolean checkConditions(List<ForecastMetric<?>> metrics) {
         return switch (type) {
             case any -> conditions.anyConditionMatches(metrics);
             case all -> conditions.allConditionsMatch(metrics);

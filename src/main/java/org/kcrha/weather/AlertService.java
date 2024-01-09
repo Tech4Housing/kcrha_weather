@@ -3,7 +3,6 @@ package org.kcrha.weather;
 import org.apache.commons.cli.CommandLine;
 import org.kcrha.weather.aggregators.BasicAggregateForecastService;
 import org.kcrha.weather.collectors.HttpService;
-import org.kcrha.weather.models.alert.RegionForecast;
 import org.kcrha.weather.models.cli.Location;
 import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.BasicAggregateForecast;
@@ -11,11 +10,7 @@ import org.kcrha.weather.notifications.HtmlAlertNotificationFormatter;
 import org.kcrha.weather.notifications.Notification;
 import org.kcrha.weather.notifications.NotificationFormatter;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AlertService implements CommandLineService {
 

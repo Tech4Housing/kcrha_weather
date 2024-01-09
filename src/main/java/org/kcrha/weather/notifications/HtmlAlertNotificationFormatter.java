@@ -55,7 +55,6 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
         for (ForecastMetricType orderedMetric : orderedMetrics) {
             html.append(String.format("<tr><td>%s</td>", WordUtils.capitalize(orderedMetric.toString().replace("_", " ").toLowerCase())));
 
-
             for (LocalDate date : dateHeaders) {
                 boolean foundMetric = false;
                 if (daysWithActiveAlerts.containsKey(date)) {
@@ -65,7 +64,7 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
                 }
                 List<? extends ForecastMetric> metrics = dataByDate.get(date);
 
-                for (ForecastMetric metric : metrics) {
+                for (ForecastMetric<?> metric : metrics) {
                     if (metric.getType() == orderedMetric && metric.getValue() != null) {
                         if (metric instanceof HeatRiskIndex) {
                             html.append(((HeatRiskIndex) metric).getFormattedValue());

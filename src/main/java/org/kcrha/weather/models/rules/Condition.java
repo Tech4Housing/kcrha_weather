@@ -3,8 +3,8 @@ package org.kcrha.weather.models.rules;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 
 public record Condition(ComparisonOperation comparisonType, Integer conditionValue) {
-    public boolean passesCondition(ForecastMetric metric) {
-        final int actualValue = metric.getValue();
+    public boolean passesCondition(ForecastMetric<?> metric) {
+        final int actualValue = metric.getValue().intValue();
 
         if (conditionValue == null || metric.getValue() == null) {
             throw new RuntimeException(String.format("The value (or comparison value) of the condition is null. (Condition value: %s, Actual value %s)", this.conditionValue, actualValue));

@@ -1,4 +1,4 @@
-package org.kcrha.weather.collectors.api.nws;
+package org.kcrha.weather.collectors.api.nws.hourly_forecast;
 
 import java.time.LocalDate;
 
@@ -8,7 +8,7 @@ public record ForecastPeriod(
         LocalDate startTime,
         LocalDate endTime,
         Boolean isDayTime,
-        Integer temperature,
+        Float temperature,
         String temperatureUnit,
         GenericUnitOfMeasure probabilityOfPrecipitation,
         GenericUnitOfMeasure dewpoint,

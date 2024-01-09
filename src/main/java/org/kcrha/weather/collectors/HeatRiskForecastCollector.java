@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import lombok.AllArgsConstructor;
-import org.kcrha.weather.collectors.api.nws.HeatRisk;
+import org.kcrha.weather.collectors.api.nws.hourly_forecast.HeatRisk;
 import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
 import org.kcrha.weather.models.forecast.metrics.HeatRiskIndex;
 

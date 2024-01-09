@@ -1,4 +1,4 @@
-package org.kcrha.weather.collectors.api.nws;
+package org.kcrha.weather.collectors.api.nws.hourly_forecast;
 
 import java.util.List;
 
