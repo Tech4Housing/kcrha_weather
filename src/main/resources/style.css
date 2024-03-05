@@ -2,7 +2,7 @@
     size: A4;
 }
 
-.forecastTableHeader, .forecastTableFooter, td, th {
+.forecastTableHeader, .forecastTableFooter, .reportActiveAlertsSummary, td, th {
     font-family: Helvetica, sans-serif;
 }
 
@@ -56,6 +56,11 @@ td.coldWeather-3 {
 .forecastTableFooter {
     font-size: 12px;
     font-style: italic;
+}
+
+.reportActiveAlertsSummary {
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .heatRisk-Green {

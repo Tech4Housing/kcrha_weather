@@ -4,7 +4,7 @@ import org.kcrha.weather.collectors.AirQualityForecastCollector;
 import org.kcrha.weather.collectors.HeatRiskForecastCollector;
 import org.kcrha.weather.collectors.HttpService;
 import org.kcrha.weather.collectors.WeatherForecastCollector;
-import org.kcrha.weather.models.forecast.BasicAggregateForecast;
+import org.kcrha.weather.models.forecast.DailyAggregateForecast;
 import org.kcrha.weather.models.forecast.DailyAirQualityForecast;
 import org.kcrha.weather.models.forecast.DailyHeatRiskForecast;
 import org.kcrha.weather.models.forecast.DailyWeatherForecast;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class BasicAggregateForecastService implements AggregateService<BasicAggregateForecast> {
+public class BasicAggregateForecastService implements AggregateService<DailyAggregateForecast> {
 
     AirQualityForecastCollector airQualityForecastCollector;
     HeatRiskForecastCollector heatRiskForecastCollector;
@@ -28,18 +28,18 @@ public class BasicAggregateForecastService implements AggregateService<BasicAggr
         weatherForecastCollector = new WeatherForecastCollector(httpService);
     }
 
-    public List<BasicAggregateForecast> getForecasts(Integer days, Float latitude, Float longitude) {
+    public List<DailyAggregateForecast> getForecasts(Integer days, Float latitude, Float longitude) {
         Map<LocalDate, DailyWeatherForecast> temperatureForecasts = weatherForecastCollector.retrieveDailyForecasts(days, latitude, longitude)
                 .stream().collect(Collectors.toMap(DailyWeatherForecast::getDay, Function.identity()));
         List<DailyAirQualityForecast> airQualityForecasts = airQualityForecastCollector.retrieveDailyForecasts(days, latitude, longitude);
         Map<LocalDate, DailyAirQualityForecast> airQualityForecastMap = airQualityForecasts.stream().filter(Objects::nonNull).collect(Collectors.toMap(DailyAirQualityForecast::getDay, Function.identity()));
         Map<LocalDate, DailyHeatRiskForecast> heatRiskForecasts = getHeatRiskForecasts(days, latitude, longitude);
-        java.util.List<BasicAggregateForecast> aggregatedForecasts = new ArrayList<>();
+        java.util.List<DailyAggregateForecast> aggregatedForecasts = new ArrayList<>();
         for (Map.Entry<LocalDate, DailyWeatherForecast> entry : temperatureForecasts.entrySet()) {
             DailyWeatherForecast dailyWeatherForecast = entry.getValue();
             AirQualityIndex aqi = airQualityForecastMap.getOrDefault(entry.getKey(), DailyAirQualityForecast.builder().build()).getAirQualityIndex();
             HeatRiskIndex hri = heatRiskForecasts.getOrDefault(entry.getKey(), DailyHeatRiskForecast.builder().build()).getHeatRiskIndex();
-            aggregatedForecasts.add(BasicAggregateForecast.builder()
+            aggregatedForecasts.add(DailyAggregateForecast.builder()
                     .day(dailyWeatherForecast.getDay())
                     .airQualityIndex(aqi)
                     .temperatureLow(dailyWeatherForecast.getTemperatureLow())

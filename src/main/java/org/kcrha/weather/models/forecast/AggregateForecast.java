@@ -5,8 +5,6 @@ import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface AggregateForecast {
-    LocalDate getDate();
-
+public interface AggregateForecast extends DailyForecast {
     List<ForecastMetric<?>> getMetrics();
 }

@@ -5,6 +5,7 @@ import jakarta.mail.Message;
 import lombok.Getter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.kcrha.weather.Report;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.email.Recipient;
 import org.simplejavamail.api.mailer.Mailer;
@@ -24,7 +25,7 @@ import java.util.List;
 import static org.kcrha.weather.models.cli.PropertyReader.getSecretProperty;
 
 @Getter
-public class EmailNotification implements Notification {
+public class EmailNotification implements Notification<Email, Report> {
 
     private static final String MAIL_HOST_SERVER_PROPERTY = "MAIL_HOST_SERVER";
     private static final String MAIL_HOST_PORT_PROPERTY = "MAIL_HOST_PORT";
@@ -35,10 +36,12 @@ public class EmailNotification implements Notification {
     private static final String MAIL_FROM_EMAIL_PROPERTY = "MAIL_FROM_EMAIL";
 
     @Override
-    public boolean send(String message) {
+    public boolean send(Email message) {
         try {
-            sendEmail(message);
-        } catch (RuntimeException | IOException e) {
+            Mailer mailer = prepareMailer();
+
+            mailer.sendMail(message);
+        } catch (RuntimeException e) {
             System.out.println("Failed to send email alert!");
             System.out.println(e);
             return false;
@@ -46,8 +49,13 @@ public class EmailNotification implements Notification {
         return true;
     }
 
-    private void sendEmail(String htmlMessage) throws IOException {
+    public Email prepare(Report report) {
 
+        createPdf(report.getFullReport());
+        return prepareEmail(report.getSummary());
+    }
+
+    private void createPdf(String htmlMessage) {
         Document document = Jsoup.parse(htmlMessage, "UTF-8");
         document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 
@@ -61,15 +69,12 @@ public class EmailNotification implements Notification {
             renderer.setDocumentFromString(document.html());
             renderer.layout();
             renderer.createPDF(outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        Email email = prepareEmail(htmlMessage);
-        Mailer mailer = prepareMailer();
-
-        mailer.sendMail(email);
     }
 
-    private Email prepareEmail(String fileName) {
+    private Email prepareEmail(String htmlMessage) {
         try {
             String recipientsString = getSecretProperty(MAIL_TO_PROPERTY);
             List<String> recipientParts = Arrays.stream(recipientsString.split(";")).toList();
@@ -82,7 +87,7 @@ public class EmailNotification implements Notification {
                     .withRecipients(recipients)
                     .from(getSecretProperty(MAIL_FROM_NAME_PROPERTY), getSecretProperty(MAIL_FROM_EMAIL_PROPERTY))
                     .withSubject(String.format("[AUTOMATED ALERT] Weather Alert -- Date: %s", LocalDate.now()))
-                    .withHTMLText("<html><body><h1>Forecasts</h1></body></html>")
+                    .withHTMLText(htmlMessage)
                     .withAttachment("forecasts", new FileDataSource("output.pdf"))
                     .buildEmail();
         } catch (IOException e) {

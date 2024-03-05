@@ -3,6 +3,8 @@ package org.kcrha.weather.notifications;
 import lombok.Getter;
 import org.apache.commons.text.WordUtils;
 import org.kcrha.weather.EmailCssFileReader;
+import org.kcrha.weather.models.cli.Location;
+import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
@@ -11,23 +13,58 @@ import org.kcrha.weather.models.rules.RuleSet;
 import org.kcrha.weather.models.rules.parser.RulesFileReader;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
-public class HtmlAlertNotificationFormatter implements NotificationFormatter {
+public class AlertHtmlReportFormatter implements ReportFormatter {
 
-    public String formatHeader() {
+    public String formatReportHeader() {
+        return formatReportHeader(null);
+    }
+
+    public String formatReportHeader(Map<Region, Map<Location, Map<LocalDate, List<String>>>> allActiveAlerts) {
+        String activeAlertSummary = "<h3>No active alerts</h3>";
+
+        if (allActiveAlerts != null && !allActiveAlerts.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+
+            final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd");
+
+            builder.append("<span class=\"forecastTableHeader\">Executive Summary</span><table><tr><th>Region / Location</th><th>Type (Severity)</th><th>Dates</th></tr>");
+            for (Map.Entry<Region, Map<Location, Map<LocalDate, List<String>>>> region : allActiveAlerts.entrySet()) {
+                for (Map.Entry<Location, Map<LocalDate, List<String>>> location : region.getValue().entrySet()) {
+                    Map<String, List<LocalDate>> severityForDays = new HashMap<>();
+                    for (Map.Entry<LocalDate, List<String>> activeAlerts : location.getValue().entrySet()) {
+                        for (String activeAlert : activeAlerts.getValue()) {
+                            if (!severityForDays.containsKey(activeAlert)) {
+                                severityForDays.put(activeAlert, new ArrayList<>());
+                            }
+                            severityForDays.get(activeAlert).add(activeAlerts.getKey());
+                        }
+                    }
+                    for (Map.Entry<String, List<LocalDate>> severity : severityForDays.entrySet()) {
+                        String sev = WordUtils.capitalize(severity.getKey().split("-")[0]) + " (" + severity.getKey().split("-")[1] + ")";
+                        builder.append("<tr><td>" + region.getKey().region() + " / " + location.getKey().location() + "</td><td>" + sev + "</td><td>" +
+                                severity.getValue().stream().map(l -> l.format(dtf)).collect(Collectors.joining(", ")) + "</td></tr>");
+                    }
+                    builder.append("<tr>");
+                    builder.append("</tr>");
+                }
+            }
+            builder.append("</table>");
+            activeAlertSummary = builder.toString();
+        }
+
         return "<!DOCTYPE html>\n" +
                 "<html lang=\"en\">\n" +
                 "<head>\n" +
                 "<title>Forecasts</title>\n" +
                 "<style>\n" +
                 EmailCssFileReader.getStyle() + "\n" +
-                "</style></head><body>\n";
+                "</style></head><body>\n" +
+                activeAlertSummary + "\n";
     }
 
     @Override
@@ -36,10 +73,11 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
     }
 
     public String formatForecastTable(List<? extends AggregateForecast> forecasts) {
-        StringBuilder html = new StringBuilder("<table>\n");
+        return formatForecastTable(forecasts, null);
+    }
 
-        List<RuleSet> ruleSets = RulesFileReader.getRules();
-        Map<LocalDate, List<String>> daysWithActiveAlerts = RulesFileReader.getDatesWithActiveAlerts(ruleSets, forecasts);
+    public String formatForecastTable(List<? extends AggregateForecast> forecasts, Map<LocalDate, List<String>> activeAlerts) {
+        StringBuilder html = new StringBuilder("<table>\n");
 
         Map<LocalDate, List<? extends ForecastMetric>> dataByDate = forecasts.stream().collect(Collectors.toMap(AggregateForecast::getDate, AggregateForecast::getMetrics));
         List<LocalDate> dateHeaders = dataByDate.keySet().stream().sorted(LocalDate::compareTo).toList();
@@ -57,8 +95,8 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
 
             for (LocalDate date : dateHeaders) {
                 boolean foundMetric = false;
-                if (daysWithActiveAlerts.containsKey(date)) {
-                    html.append(String.format("<td class=\"%s\">", String.join(" ", daysWithActiveAlerts.get(date))));
+                if (activeAlerts != null && activeAlerts.containsKey(date)) {
+                    html.append(String.format("<td class=\"%s\">", String.join(" ", activeAlerts.get(date))));
                 } else {
                     html.append("<td class=\"noAlert\">");
                 }
@@ -94,7 +132,7 @@ public class HtmlAlertNotificationFormatter implements NotificationFormatter {
     }
 
     @Override
-    public String formatFooter() {
+    public String formatReportFooter() {
         return "</body></html>";
     }
 }
