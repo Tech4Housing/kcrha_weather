@@ -9,15 +9,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public record Conditions(Map<ForecastMetricType, Condition> conditionMap) {
-    public boolean anyConditionMatches(List<ForecastMetric> metrics) {
+    public boolean anyConditionMatches(List<ForecastMetric<?>> metrics) {
         return checkConditions(metrics).containsValue(true);
     }
 
-    public boolean allConditionsMatch(List<ForecastMetric> metrics) {
+    public boolean allConditionsMatch(List<ForecastMetric<?>> metrics) {
         return !checkConditions(metrics).containsValue(false);
     }
 
-    private Map<ForecastMetricType, Boolean> checkConditions(List<ForecastMetric> metrics) {
+    private Map<ForecastMetricType, Boolean> checkConditions(List<ForecastMetric<?>> metrics) {
         Map<ForecastMetricType, Boolean> areConditionsMet = conditionMap.keySet().stream().collect(Collectors.toMap(Function.identity(), c -> false));
 
         for (ForecastMetric metric : metrics) {

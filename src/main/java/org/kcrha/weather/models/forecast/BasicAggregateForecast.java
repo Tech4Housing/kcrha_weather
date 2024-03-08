@@ -18,6 +18,8 @@ public class BasicAggregateForecast implements AggregateForecast {
     private TemperatureAverage temperatureAverage;
     private TemperatureLow temperatureLow;
     private HeatRiskIndex heatRiskIndex;
+    private RainfallAccumulation rainfallAccumulation;
+    private SnowIceAccumulation snowIceAccumulation;
 
     @Override
     public LocalDate getDate() {
@@ -25,11 +27,13 @@ public class BasicAggregateForecast implements AggregateForecast {
     }
 
     @Override
-    public List<ForecastMetric> getMetrics() {
+    public List<ForecastMetric<?>> getMetrics() {
         return List.of(airQualityIndex == null ? new AirQualityIndex(null) : airQualityIndex,
                 temperatureHigh,
                 temperatureAverage,
                 temperatureLow,
-                heatRiskIndex == null ? new HeatRiskIndex(null) : heatRiskIndex);
+                heatRiskIndex == null ? new HeatRiskIndex(null) : heatRiskIndex,
+                rainfallAccumulation == null ? new RainfallAccumulation(null) : rainfallAccumulation,
+                snowIceAccumulation == null ? new SnowIceAccumulation(null) : snowIceAccumulation);
     }
 }

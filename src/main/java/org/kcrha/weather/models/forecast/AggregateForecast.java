@@ -8,5 +8,5 @@ import java.util.List;
 public interface AggregateForecast {
     LocalDate getDate();
 
-    List<ForecastMetric> getMetrics();
+    List<ForecastMetric<?>> getMetrics();
 }

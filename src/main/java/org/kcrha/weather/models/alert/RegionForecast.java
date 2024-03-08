@@ -67,7 +67,7 @@ public class RegionForecast implements AggregateForecast {
     }
 
     @Override
-    public List<ForecastMetric> getMetrics() {
+    public List<ForecastMetric<?>> getMetrics() {
         return List.of(airQualityIndex == null ? new AirQualityIndex(null) : airQualityIndex,
                 temperatureHigh,
                 getTemperatureAverage(),

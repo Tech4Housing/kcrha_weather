@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.Map;
 
 @Getter
-public class HeatRiskIndex implements ForecastMetric {
+public class HeatRiskIndex implements ForecastMetric<Integer> {
     public final ForecastMetricType type = ForecastMetricType.HEAT_RISK_INDEX;
     public final String shortName = "HeatRisk";
     public final String longName = "HeatRisk Index";

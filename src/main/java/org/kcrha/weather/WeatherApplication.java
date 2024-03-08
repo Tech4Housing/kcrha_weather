@@ -6,10 +6,6 @@ import org.kcrha.weather.models.cli.TaskType;
 import org.kcrha.weather.notifications.ConsoleNotification;
 import org.kcrha.weather.notifications.EmailNotification;
 
-import java.io.IOException;
-
-import static org.kcrha.weather.models.cli.PropertyReader.getSecretProperty;
-
 public class WeatherApplication {
 
     final static Options OPTIONS = getOptions();

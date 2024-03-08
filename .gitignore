@@ -42,3 +42,5 @@ out/
 ### Secrets ###
 src/main/resources/secrets.properties
 
+### Outputs ###
+output.pdf

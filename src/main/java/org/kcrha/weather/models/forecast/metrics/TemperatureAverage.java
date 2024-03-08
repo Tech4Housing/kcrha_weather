@@ -3,7 +3,7 @@ package org.kcrha.weather.models.forecast.metrics;
 import lombok.Getter;
 
 @Getter
-public class TemperatureAverage extends TemperatureBase implements ForecastMetric {
+public class TemperatureAverage extends TemperatureBase implements ForecastMetric<Integer> {
     public final ForecastMetricType type = ForecastMetricType.TEMPERATURE_AVERAGE;
     public final String shortName = "Temp Avg";
     public final String longName = "Temperature Average";
