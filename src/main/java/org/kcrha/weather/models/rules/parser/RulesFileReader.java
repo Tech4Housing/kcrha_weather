@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 
 public class RulesFileReader extends BaseFileReader {
     public static final String ALERT_RULES_RESOURCE_FILE_PATH = "alertRules.json";
+    public static final List<RuleSet> rules = getRules();
 
     public static List<RuleSet> getRules() {
+        if (rules != null) {
+            return rules;
+        }
 
         String alertRulesJson = RulesFileReader.readFile(ALERT_RULES_RESOURCE_FILE_PATH);
         Gson gson = new Gson();

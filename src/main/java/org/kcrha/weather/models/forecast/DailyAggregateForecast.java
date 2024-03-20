@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasicAggregateForecast implements AggregateForecast {
+public class DailyAggregateForecast implements AggregateForecast {
     private LocalDate day;
     private AirQualityIndex airQualityIndex;
     private TemperatureHigh temperatureHigh;

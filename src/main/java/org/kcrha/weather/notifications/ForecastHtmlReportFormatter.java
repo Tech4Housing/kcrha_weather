@@ -2,19 +2,23 @@ package org.kcrha.weather.notifications;
 
 import lombok.Getter;
 import org.kcrha.weather.EmailCssFileReader;
+import org.kcrha.weather.models.cli.Location;
+import org.kcrha.weather.models.cli.Region;
 import org.kcrha.weather.models.forecast.AggregateForecast;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetric;
 import org.kcrha.weather.models.forecast.metrics.ForecastMetricType;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
-public class HtmlForecastNotificationFormatter implements NotificationFormatter {
+public class ForecastHtmlReportFormatter implements ReportFormatter {
+    public String formatReportHeader() {
+        return formatReportHeader(new HashMap<>());
+    }
 
-    public String formatHeader() {
+    public String formatReportHeader(Map<Region, Map<Location, Map<LocalDate, List<String>>>> allActiveAlerts) {
         return "<html>\n" +
                 "<head>\n" +
                 "<style>\n" +
@@ -22,7 +26,7 @@ public class HtmlForecastNotificationFormatter implements NotificationFormatter 
                 "</style>\n" +
                 "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n" +
                 "</head>\n" +
-                "<body>\n";
+                "<body>\n\n";
     }
 
     @Override
@@ -31,6 +35,10 @@ public class HtmlForecastNotificationFormatter implements NotificationFormatter 
     }
 
     public String formatForecastTable(List<? extends AggregateForecast> forecasts) {
+        return formatForecastTable(forecasts, null);
+    }
+
+    public String formatForecastTable(List<? extends AggregateForecast> forecasts, Map<LocalDate, List<String>> activeAlerts) {
         StringBuilder html = new StringBuilder("<table>\n");
 
         List<? extends ForecastMetric> orderedMetrics = null;
@@ -70,7 +78,7 @@ public class HtmlForecastNotificationFormatter implements NotificationFormatter 
     }
 
     @Override
-    public String formatFooter() {
+    public String formatReportFooter() {
         return "</body></html>";
     }
 }

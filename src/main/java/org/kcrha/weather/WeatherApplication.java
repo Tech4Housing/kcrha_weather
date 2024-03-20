@@ -59,12 +59,10 @@ public class WeatherApplication {
 
         switch (task) {
             case ALERTS -> {
-                EmailNotification notification = new EmailNotification();
-                new AlertService(notification).run(taskCommand);
+                new EmailAlertService().run(taskCommand);
             }
             case FORECASTS -> {
-                ConsoleNotification notification = new ConsoleNotification();
-                new ForecastService(notification).run(taskCommand);
+                new ForecastService().run(taskCommand);
             }
             default -> throw new RuntimeException(String.format("Unknown TaskType: %s", task));
         }

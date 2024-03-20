@@ -1,6 +1,8 @@
 package org.kcrha.weather.notifications;
 
-public interface Notification {
+public interface Notification<T, U> {
 
-    boolean send(String message);
+    boolean send(T message);
+
+    T prepare(U message);
 }
